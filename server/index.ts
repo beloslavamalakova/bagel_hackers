@@ -4,6 +4,7 @@ import { GoogleGenAI, type Session, type LiveServerMessage } from '@google/genai
 import { readFileSync, existsSync } from 'node:fs';
 import { createAppHandler } from './http';
 import { context } from 'esbuild';
+import { ambientEvents, isSideEventId, type SideEventId } from '../src/data/ambient';
 import { parseAudioChunk } from './audio';
 import { isTaskId, liveConfig, MODEL, completionDecision } from './agent';
 // Only the server reads .env. Never bundle process.env or the API key into browser code.
@@ -47,6 +48,8 @@ wss.on('connection', (socket, req) => {
         if(!configured()) { fail('Voice is not configured yet. Add GEMINI_API_KEY to .env and restart the server.'); clearTimeout(initTimeout); return; }
         starting=true;
         const scene = msg.scene;
+        const sideEvent:SideEventId|undefined|null = msg.sideEvent === undefined ? undefined : isSideEventId(msg.sideEvent) ? msg.sideEvent : null;
+        if(sideEvent===null || (sideEvent&&!ambientEvents[sideEvent].sceneIds.includes(scene))){fail('This side encounter is not available here.');return;}
         const ai = new GoogleGenAI({apiKey:process.env.GEMINI_API_KEY!,httpOptions:{apiVersion:'v1beta'}});
         const onmessage = (event: LiveServerMessage) => {
           if(ended) return;
@@ -63,7 +66,7 @@ wss.on('connection', (socket, req) => {
           }
           if(event.toolCall) {
             for(const call of event.toolCall.functionCalls ?? []) {
-              const result = call.name === 'complete_task' ? completionDecision(scene,call.args,completed,learnerTurns) : {accepted:false,reason:'Unknown tool.'};
+              const result = call.name === 'complete_task' ? completionDecision(scene,call.args,completed,learnerTurns,sideEvent) : {accepted:false,reason:'Unknown tool.'};
               session?.sendToolResponse({functionResponses:[{id:call.id,name:call.name,response:{result:result.reason,accepted:result.accepted}}]});
               if(result.accepted) {
                 completed=true;
@@ -73,7 +76,7 @@ wss.on('connection', (socket, req) => {
           }
           if(event.goAway) { fail('This voice session is ending. Retry to reconnect with this character.'); }
         };
-        const connected = await ai.live.connect({model:MODEL,config:liveConfig(scene),callbacks:{
+        const connected = await ai.live.connect({model:MODEL,config:liveConfig(scene,sideEvent),callbacks:{
           onmessage, onerror:() => { if(!ended) fail('Gemini could not connect. Check your key, model access, and network, then retry.'); },
           onclose:() => { if(!ended) { ready=false; fail('The voice connection closed. Retry to continue this encounter.'); } }
         }});

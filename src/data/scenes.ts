@@ -40,4 +40,4 @@ export const scenes: Record<TaskId, SceneConfig> = {
   }
 };
 export const missionLabels = ['Ask a local for a recommendation','Ask for directions','Order at the bakery','Talk to someone in French'];
-export function nextScene(id: TaskId) { return taskIds[taskIds.indexOf(id)+1] ?? 'completed' as const; }
+export function nextScene(id: TaskId):TaskId|'completed' { return taskIds[taskIds.indexOf(id)+1] ?? 'completed' as const; }

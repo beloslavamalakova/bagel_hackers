@@ -9,14 +9,14 @@ export function NPC({id,speaking=false,portrait=false}:{id:TaskId;speaking?:bool
  <path d="M117 367 108 465h40l12-94 8 94h40l-9-98" fill={boy?'#334149':'#3d3631'}/>
  <path d="M106 455q-16 9-20 22h65v-22M171 455v22h65q-10-19-28-22" fill="#352d2a"/>
  <path d="M115 187q-40 4-51 47l-19 112 30 7 30-91-2 114q55 18 115 0l-5-113 24 90 28-9-19-112q-13-41-51-45Z" fill={`url(#coat-${id})`}/>
- <path d="m75 324-7 35q-5 24-18 22-10-6-3-22l5-34M239 326l9 31q8 17 16 15 11-4 0-22l-9-28" fill={skin}/>
+ <g className="npc-hands"><path d="m75 324-7 35q-5 24-18 22-10-6-3-22l5-34M239 326l9 31q8 17 16 15 11-4 0-22l-9-28" fill={skin}/></g>
  <path d="M139 162v31q19 19 42 0v-31" fill={skin}/>
  {!boy && <path d="M112 110q-2-74 47-76 59 1 52 78l11 68-33 10-61-2-22-16Z" fill={hair}/>}
  <ellipse cx="160" cy="120" rx="48" ry="61" fill={skin}/>
  <ellipse cx="113" cy="125" rx="8" ry="13" fill={skin}/><ellipse cx="207" cy="125" rx="8" ry="13" fill={skin}/>
  <path d={boy?'M112 104q-9-61 43-67 53-3 57 57l-20-16-11-14q-24 23-69 19Z':lea?'M112 100q-4-70 58-67 51 12 40 82l-22-30q-17-9-19-25-17 30-57 40Z':'M112 105q-2-58 44-67 50-5 56 64l-21-9-9-29q-25 28-70 41Z'} fill={hair}/>
  <path d="M130 108q8-5 16-1M176 107q8-5 16 1" fill="none" stroke={hair} strokeWidth="3" strokeLinecap="round"/>
- <ellipse cx="139" cy="119" rx="3" ry="4" fill="#3c332e"/><ellipse cx="183" cy="119" rx="3" ry="4" fill="#3c332e"/>
+ <ellipse className="npc-eye" cx="139" cy="119" rx="3" ry="4" fill="#3c332e"/><ellipse className="npc-eye" cx="183" cy="119" rx="3" ry="4" fill="#3c332e"/>
  <path d="m158 121-3 15 9 1" fill="none" stroke="#c1886d" strokeWidth="2" strokeLinecap="round"/>
  <path className="npc-mouth" d="M146 151q14 13 30-1" fill={speaking?'#934f43':'none'} stroke="#984f42" strokeWidth="2.3" strokeLinecap="round"/>
  <ellipse cx="129" cy="139" rx="10" ry="5" fill="#e89f87" opacity=".4"/><ellipse cx="191" cy="139" rx="10" ry="5" fill="#e89f87" opacity=".4"/>

@@ -3,12 +3,13 @@ import type { TaskId, TranscriptLine, VoiceStatus } from '../types/game';
 import { AudioPlayer, encodePcm, pcmMimeType } from '../lib/audio';
 import { MicrophoneCapture, type CaptureResult, type CaptureStats } from '../lib/microphone';
 import { SpeechStream } from '../lib/speechStream';
+import type { SideEventId } from '../data/ambient';
 interface Resources {
   socket:WebSocket; player:AudioPlayer; microphone?:MicrophoneCapture;
   speech?:SpeechStream; recording:boolean; stopping:boolean;
 }
 interface Diagnostics extends CaptureStats { receivedMs?:number }
-export function useGeminiLive(scene:TaskId|null,onComplete:(id:TaskId,feedback?:string)=>void) {
+export function useGeminiLive(scene:TaskId|null,onComplete:(id:TaskId,feedback?:string)=>void,sideEvent?:SideEventId) {
   const [status,setStatus]=useState<VoiceStatus>('offline');
   const [error,setError]=useState<string|null>(null);
   const [notice,setNotice]=useState<string|null>(null);
@@ -63,7 +64,7 @@ export function useGeminiLive(scene:TaskId|null,onComplete:(id:TaskId,feedback?:
         else{setError(message);update('error');}
       };
       let audioWatchdog:ReturnType<typeof setTimeout>|undefined;
-      socket.onopen=()=>{if(active())socket.send(JSON.stringify({type:'start',scene}));};
+      socket.onopen=()=>{if(active())socket.send(JSON.stringify({type:'start',scene,...(sideEvent?{sideEvent}:{})}));};
       socket.onmessage=event=>{
         if(!active())return;
         try {
@@ -131,7 +132,7 @@ export function useGeminiLive(scene:TaskId|null,onComplete:(id:TaskId,feedback?:
       setError(denied?'Microphone access was denied. Allow the microphone in your browser’s site settings, then retry.':e instanceof Error?e.message:'Could not prepare audio. Check your microphone and retry.');
       update('error');
     }
-  },[scene,dispose]);
+  },[scene,dispose,sideEvent]);
   const startSpeaking=useCallback(async()=>{
     const r=resources.current;
     if(!r?.microphone||currentStatus.current!=='ready'||preparing.current||r.recording||r.stopping)return;

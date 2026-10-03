@@ -1,9 +1,18 @@
 import type { SceneConfig } from '../types/game';
 import { NPC } from './NPC';
 import { Icon } from './Icon';
+import { WorldLayer } from './world/WorldLayer';
+import type { PointerEvent } from 'react';
 export function Environment({scene,speaking=false,intro=false}:{scene:SceneConfig;speaking?:boolean;intro?:boolean}){
- return <div className={`environment ${scene.environment} ${intro?'intro-environment':''}`}>
-  <img className="environment-bg" src={`/scenes/${scene.environment}.svg`} alt={scene.id.startsWith('street')?'An illustrated Parisian street with cream stone buildings and wrought-iron balconies':'A warmly lit French bakery with fresh croissants and coffee'} />
+ const moveCamera=(event:PointerEvent<HTMLDivElement>)=>{
+   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+   const bounds=event.currentTarget.getBoundingClientRect();
+   event.currentTarget.style.setProperty('--camera-x',`${((event.clientX-bounds.left)/bounds.width-.5)*5}px`);
+   event.currentTarget.style.setProperty('--camera-y',`${((event.clientY-bounds.top)/bounds.height-.5)*3}px`);
+ };
+ return <div onPointerMove={moveCamera} onPointerLeave={event=>{event.currentTarget.style.setProperty('--camera-x','0px');event.currentTarget.style.setProperty('--camera-y','0px');}} className={`environment ${scene.environment} ${intro?'intro-environment':''}`}>
+  <div className="environment-camera"><img className="environment-bg" src={`/scenes/${scene.environment}.svg`} alt={scene.id.startsWith('street')?'An illustrated Parisian street with cream stone buildings and wrought-iron balconies':'A warmly lit French bakery with fresh croissants and coffee'} />
+  <WorldLayer scene={scene.id}/></div>
   <div className="scene-vignette"/>
   {!intro&&<div className="location-tag"><Icon name="pin" size={15}/>{scene.location}<span>PARIS, FRANCE</span></div>}
   <NPC id={scene.id} speaking={speaking}/>

@@ -1,0 +1,192 @@
+/* Layered illustration choreography: no renderer, physics loop, or movement controls. */
+.environment-camera{position:absolute;inset:-2%;transform:translate3d(var(--camera-x,0px),var(--camera-y,0px),0);transition:transform 1.2s ease;overflow:hidden}
+.environment-camera>.environment-bg{animation:camera-breathe 24s ease-in-out infinite alternate;transform-origin:48% 60%}
+.world-layer{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1}
+.ambient-actor{position:absolute;bottom:var(--actor-bottom);width:155px;height:205px;z-index:1;pointer-events:none;will-change:transform}
+.ambient-actor.moving{left:-200px;animation:ambient-cross var(--actor-duration) linear var(--actor-delay) infinite}
+.ambient-actor.direction-left.moving{left:auto;right:-200px;animation-name:ambient-cross-left}
+.actor-size{height:100%;width:100%;transform:scale(var(--actor-scale)) scaleX(var(--actor-direction));transform-origin:bottom center}
+.actor-art{height:100%;width:100%;overflow:visible}
+.actor-person{animation:person-sway 4.9s ease-in-out infinite;transform-origin:90px 190px}
+.actor-leg{transform-origin:87px 141px;animation:walking-leg 1.3s ease-in-out infinite alternate}
+.actor-leg-b{animation-delay:-.65s}
+.actor-cyclist .actor-leg,.actor-scooter .actor-leg{animation:pedal-leg 1.2s ease-in-out infinite alternate}
+.actor-guest .actor-leg{animation:none}
+.actor-guest .actor-arm{animation:coffee-sip 9.4s ease-in-out infinite;transform-origin:104px 85px}
+.actor-arm{animation:walking-arm 2.6s ease-in-out infinite;transform-origin:104px 87px}
+.ambient-actor:nth-child(2n) .actor-person{animation-delay:-1.7s;animation-duration:6.2s}
+.ambient-actor:nth-child(3n) .actor-leg{animation-duration:1.7s}
+.ambient-actor.stationary{left:4%;bottom:var(--actor-bottom)}
+.ambient-actor.cafe-guest-right{left:auto;right:1%}
+.little-dog{animation:dog-trot .7s ease-in-out infinite alternate}
+.npc-art{animation:npc-enter 1s ease both,npc-idle 6.7s ease-in-out 1s infinite;will-change:translate}
+.npc-art.is-speaking{animation:npc-enter 1s ease both,npc-speak 2s ease-in-out infinite}
+.npc-eye{transform-box:fill-box;transform-origin:center;animation:npc-blink 7.3s infinite}
+.npc-hands{transform-origin:160px 340px;animation:npc-weight-shift 11s ease-in-out infinite}
+.environment.bakery-customer .npc-art{animation-delay:0s,-2.5s}
+.wind-leaf{position:absolute;width:12px;height:5px;border-radius:100% 0;background:#a28b5f;left:-10%;top:77%;animation:leaf-drift 18s linear infinite;opacity:.5}
+.leaf-two{top:64%;animation-delay:-9s;animation-duration:23s}
+.coffee-steam{position:absolute;left:17%;top:65%;width:16px;height:34px;border-left:2px solid #fcf1d577;border-radius:50%;animation:steam-rise 4s ease-out infinite}
+.steam-two{left:auto;right:14%;top:70%;animation-delay:-2.2s}
+.sunbeam{position:absolute;inset:0;background:linear-gradient(125deg,#ffecc220,transparent 45%);animation:sunlight 15s ease-in-out infinite alternate}
+.journey-strip{height:44px;flex:0 0 auto;display:flex;justify-content:space-between;position:relative;padding:0 7px;margin:-2px 1px 10px;isolation:isolate}
+.journey-track{height:1px;background:#e0ddce;position:absolute;left:12px;right:12px;top:8px;z-index:-1}
+.journey-track>div{height:100%;background:#8c9b79;transition:width 1.5s ease}
+.journey-node{display:flex;flex-direction:column;align-items:center;gap:6px;color:#aba696;min-width:28px}
+.journey-node>span{width:17px;height:17px;display:grid;place-items:center;border:1px solid #dedbce;background:#f7f4ed;border-radius:50%}
+.journey-node small{font-size:9px;letter-spacing:.15px}
+.journey-node.visited{color:#88937b}
+.journey-node.visited>span{background:#8b9b79;border-color:#8b9b79;color:white}
+.journey-node.active{color:#a35a40}
+.journey-node.active>span{background:#f2e9d9;border-color:#cbb096;color:#9c5d43;box-shadow:0 0 0 4px #cbb09615}
+.is-traveling .journey-node.active>span{animation:journey-beacon 1.4s infinite}
+.story-timeline li{padding-bottom:20px;min-height:50px}
+.story-timeline .story-prologue{font-size:11px;color:#8e907c}
+.story-prologue small{display:block!important;font-size:7px!important;color:#b1aa93!important}
+.story-travel{display:flex;gap:7px;align-items:center;padding:8px 0;font-size:10px;color:#819072}
+.story-memories{border-top:1px solid #e1dece;padding:11px 0 8px}
+.story-memories>span{font-size:8px;letter-spacing:1px;color:#a89165}
+.story-memories p{display:flex;align-items:start;gap:7px;font-size:10px;line-height:1.5;color:#918366;margin-top:9px}
+.story-memories p>span{color:#b99756}
+.moment-animation{position:absolute;z-index:4;bottom:16%;left:8%;width:150px;height:210px;pointer-events:none;animation:moment-enter 1.2s ease both}
+.moment-animation>.actor-art{height:100%;width:100%}
+.moment-speech{position:absolute;top:0;left:40%;font-family:var(--serif);font-style:italic;font-size:13px;white-space:nowrap;background:#fff8e6e8;border-radius:8px;padding:7px 10px;box-shadow:0 2px 10px #38271912;animation:moment-speech 2s 1s both}
+.moment-prompt{position:absolute;z-index:6;top:68px;right:16px;width:min(245px,calc(100% - 32px));background:#fffaf0ed;backdrop-filter:blur(14px);border:1px solid #fff8e4;border-radius:8px;padding:14px;box-shadow:0 10px 30px #55402015;animation:prompt-arrive .6s ease both}
+.moment-eyebrow{display:flex;align-items:center;gap:5px;font-size:7px;letter-spacing:1.1px;color:#a09168;line-height:1.6}
+.moment-prompt strong{display:block;font-family:var(--serif);font-size:17px;font-weight:400;color:#655b45;margin-top:8px}
+.moment-prompt p{font-size:10px;color:#9a8f75;line-height:1.6;margin-top:7px}
+.moment-actions{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+.moment-actions button{display:flex;align-items:center;gap:8px;font-size:10px;border:0;border-radius:4px;background:#657854;color:#fff9e9;padding:8px 10px}
+.moment-actions button:hover:not(:disabled){background:#536847}
+.moment-actions button:disabled{opacity:.45;cursor:default}
+.moment-actions .moment-ignore{background:none;color:#a2977a;padding:5px 0;font-size:9px}
+.falling-cup{position:absolute;left:5%;top:41%;font-size:21px;animation:coffee-fall 1.4s .8s both}
+.coffee-splash{position:absolute;bottom:6%;left:3%;width:48px;height:10px;background:#77503878;border-radius:50%;animation:splash-in .5s 1.9s both}
+.reaction-mark{position:absolute;left:55%;top:10%;font-family:var(--serif);font-size:27px;color:#b38958;animation:reaction 1.5s 1.1s both}
+.moment-coffee_spill .waiter-tray{transform-origin:28px 110px;animation:tray-tip 1.5s .6s both}
+.dropped-scarf{position:absolute;left:63%;top:62%;width:55px;height:30px;animation:scarf-drop 2s .6s both}
+.pecking-pigeon{position:absolute;left:70%;bottom:9%;width:74px;height:65px;transform-origin:bottom;animation:pigeon-peck 1.7s ease-in-out infinite}
+.stolen-croissant{position:absolute;left:74%;bottom:10%;font-size:18px;animation:croissant-hop 2s ease-in-out infinite}
+.moment-dog_hello .little-dog{animation:dog-excited .75s ease-in-out infinite alternate}
+.moment-lost_tourists .actor-art{animation:map-confusion 7s ease-in-out infinite}
+.side-npc-portrait{position:absolute;z-index:3;left:50%;bottom:18%;height:64%;width:230px;transform:translateX(-50%);animation:prompt-arrive .8s both;pointer-events:none}
+.side-npc-portrait>.actor-art{height:100%;width:100%}
+.has-side>.environment>.npc-art,.has-side .npc-nameplate{visibility:hidden}
+.active-side-world{position:absolute;z-index:4;bottom:23%;left:50%;transform:translateX(-50%);background:#fff8eae8;padding:10px 15px;backdrop-filter:blur(10px);border:1px solid #fffdf4;border-radius:7px;min-width:180px;text-align:center}
+.active-side-world>span{display:flex;align-items:center;justify-content:center;gap:7px;color:#9b865b;font-size:9px}
+.active-side-world p{font-family:var(--serif);font-size:16px;font-style:italic;color:#6c7556;margin-top:6px}
+.side-conversation{min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden;border-left:1px solid var(--border);background:#faf8f2}
+.side-heading{display:flex;justify-content:space-between;align-items:center;padding:17px 20px 10px;flex-shrink:0;background:#ececde}
+.side-heading>span{display:flex;align-items:center;gap:7px;font-size:9px;letter-spacing:1.4px;color:#83916d}
+.side-heading>button{display:grid;place-items:center;background:none;border:0;padding:5px;color:#96947f}
+.side-return-note{font-size:9px;line-height:1.6;padding:9px 20px 0;color:#a39c87;flex-shrink:0}
+.side-conversation>.conversation-panel{border-left:0;flex:1 1 0;min-height:0;padding-top:13px}
+.side-conversation .conversation-note,.side-conversation .conversation-footer{display:none}
+.side-reward{display:flex;flex-direction:column;align-items:center;text-align:center;justify-content:center;padding:25px;height:100%;gap:17px;animation:prompt-arrive .5s}
+.side-reward>span{font-size:66px;color:#b99b5f;animation:reward-star 1s ease both}
+.side-reward h2{font-family:var(--serif);font-weight:400;font-size:28px;color:#657454}
+.side-reward p{font-size:12px;line-height:1.7;color:#a1967c}
+.side-reward strong{font-size:12px;font-weight:500;background:#ede7cd;color:#9b8454;border:1px solid #e0d4ae;padding:9px 16px;border-radius:20px}
+.travel-sequence{position:absolute;inset:0;z-index:12;background:#d6c8ab;overflow:hidden;isolation:isolate;animation:fade-in .3s}
+.travel-camera{position:absolute;inset:0;overflow:hidden}
+.travel-background,.travel-destination{position:absolute;width:100%;height:100%;object-fit:cover}
+.travel-background{animation:travel-background 6.9s ease-in-out both}
+.travel-destination{opacity:0;transform:scale(1.08);transition:opacity 1.4s,transform 2s}
+.phase-2 .travel-destination,.phase-3 .travel-destination{opacity:1;transform:scale(1)}
+.travel-midground{position:absolute;inset:0;width:220%;height:100%;left:10%;opacity:0;animation:travel-buildings 6.9s ease-in-out both}
+.travel-midground>svg{width:100%;height:100%;object-fit:cover}
+.travel-pavement{position:absolute;left:-25%;right:-25%;bottom:0;height:21%;background:repeating-linear-gradient(168deg,transparent 0 29px,#9d8f7230 30px 32px),#bdab8a;opacity:.7;animation:travel-road 6.9s ease-in-out both}
+.travel-goodbye{position:absolute;inset:0;animation:travel-goodbye 6.9s ease-in-out both}
+.travel-goodbye .npc-hands{transform-origin:250px 335px;animation:goodbye-wave .7s ease-in-out 3 alternate}
+.travel-foreground{position:absolute;inset:0;z-index:4;animation:travel-foreground 6.9s ease both;pointer-events:none}
+.travel-foreground .ambient-actor{animation-iteration-count:1}
+.travel-arrival{position:absolute;inset:0;opacity:0;transform:translateX(14px);transition:opacity 1s,transform 1s;z-index:3}
+.phase-3 .travel-arrival{opacity:1;transform:translateX(0)}
+.entering-bakery .travel-arrival .npc-art{clip-path:inset(0 0 29% 0)}
+.travel-pigeon{position:absolute;width:58px;top:30%;left:-70px;animation:pigeon-fly 3s 1.7s linear both}
+.travel-letterbox{position:absolute;left:0;right:0;height:30px;background:#35392dcc;z-index:7;animation:letterbox-in .7s both}
+.travel-letterbox.top{top:0}.travel-letterbox.bottom{bottom:0}
+.travel-topline{position:absolute;top:45px;left:20px;right:20px;z-index:8;display:flex;align-items:center;gap:7px;font-size:9px;letter-spacing:1.2px;color:#fff6dd;text-shadow:0 1px 5px #332d23}
+.travel-step{margin-left:auto;font-size:7px;letter-spacing:1px;color:#e7d8bb}
+.travel-narration{position:absolute;bottom:55px;left:6%;right:6%;z-index:8;padding:17px 20px;background:#f7f1e5e6;backdrop-filter:blur(10px);border:1px solid #ffffff80;border-radius:7px;text-align:center;box-shadow:0 7px 25px #44331c12}
+.travel-narration>span{font-size:8px;letter-spacing:2px;color:#a58b5f}
+.travel-narration h2{font-family:var(--serif);font-size:23px;font-weight:400;line-height:1.4;margin-top:7px;color:#5f6550}
+.travel-narration p{font-size:10px;color:#96866a;line-height:1.6;margin-top:6px}
+.travel-progress{height:2px;background:#dcd7c3;margin:17px auto 0;max-width:160px;overflow:hidden}
+.travel-progress>span{display:block;height:100%;background:#8b9872;animation:travel-progress 6.9s linear both}
+.travel-sidebar{border-left:1px solid var(--border);background:#faf8f2;display:flex;flex-direction:column;align-items:center;text-align:center;justify-content:center;padding:25px;min-width:0;min-height:0}
+.travel-sidebar>.eyebrow{font-size:8px;letter-spacing:1.4px}
+.travel-sidebar>svg{color:#a18e61;margin:37px 0 20px;animation:person-sway 4s ease-in-out infinite}
+.travel-sidebar h2{font-family:var(--serif);font-size:28px;font-weight:400;line-height:1.4;color:#667458}
+.travel-sidebar p{font-size:12px;line-height:1.8;color:#a19880;margin-top:17px}
+.travel-sidebar small{font-size:10px;color:#b1a58d;margin-top:25px}
+.travel-sidebar-line{width:1px;height:70px;background:#dcd7c5;margin-top:35px;position:relative;overflow:hidden}
+.travel-sidebar-line:after{content:'';position:absolute;top:0;width:1px;height:20px;background:#8a9a71;animation:story-route 2s linear infinite}
+.bakery-entry{position:absolute;inset:-3%;padding:9% 15% 0;background:#dfcaa8;z-index:5;opacity:0;pointer-events:none;transition:opacity .4s;perspective:1000px}
+.phase-2 .bakery-entry{opacity:1}
+.phase-3 .bakery-entry{opacity:0;transition-delay:1s}
+.bakery-entry-sign{height:20%;background:#8b493a;border:5px solid #bd8a5b;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--serif);font-size:clamp(20px,2.4vw,37px);color:#f1d8a6;letter-spacing:1px;box-shadow:0 4px 14px #60422e1a}
+.bakery-entry-sign small{font-family:Arial,sans-serif;letter-spacing:3px;font-size:8px;margin-top:8px}
+.doorway{position:relative;margin:5% auto 0;width:72%;height:76%;background:#71503c;border:11px solid #a87850;perspective:800px;box-shadow:0 0 0 8px #ccb18c}
+.door-light{position:absolute;inset:0;background:#eacb91;box-shadow:0 0 70px #fce1a277}
+.bakery-door{position:absolute;inset:0;background:#9c6044;border:8px solid #805037;transform-origin:left;transition:transform 1.2s ease-in-out;backface-visibility:hidden}
+.phase-3 .bakery-door{transform:rotateY(-100deg)}
+.door-glass{position:absolute;inset:5% 7% 26%;background:#e8cea062;border:6px solid #84553e}
+.door-handle{position:absolute;right:4%;top:63%;width:5px;height:34px;background:#d6b76c;border-radius:5px}
+.door-lettering{position:absolute;top:37%;width:100%;text-align:center;font-family:var(--serif);font-style:italic;font-size:25px;color:#fae7c0}
+.entry-bell{position:absolute;top:-25px;right:6px;width:30px;height:38px;transform-origin:top}
+.phase-3 .entry-bell{animation:bell-ring .2s ease-in-out 7 alternate}
+.completion-memories{margin-top:17px;padding:12px;background:#f0ebda;border-radius:7px;text-align:left}
+.completion-memories>span{font-size:8px;letter-spacing:1.5px;color:#a18d60}
+.completion-memories p{font-size:11px;color:#8d8062;line-height:1.6;margin-top:7px}
+@keyframes camera-breathe{from{transform:scale(1)}to{transform:scale(1.025) translateX(-.4%)}}
+@keyframes ambient-cross{0%{transform:translateX(-170px)}100%{transform:translateX(calc(100vw + 250px))}}
+@keyframes ambient-cross-left{0%{transform:translateX(170px)}100%{transform:translateX(calc(-100vw - 250px))}}
+@keyframes person-sway{50%{transform:rotate(1.3deg) translateY(-1px)}}
+@keyframes walking-leg{from{transform:rotate(-8deg)}to{transform:rotate(8deg)}}
+@keyframes walking-arm{50%{transform:rotate(5deg)}}
+@keyframes pedal-leg{50%{transform:rotate(10deg)}}
+@keyframes coffee-sip{0%,58%,100%{transform:rotate(0)}67%,77%{transform:rotate(-22deg)}}
+@keyframes dog-trot{to{translate:1px -2px}}
+@keyframes npc-idle{0%,100%{translate:0 0;rotate:-.3deg}50%{translate:1px -3px;rotate:.3deg}}
+@keyframes npc-blink{0%,39%,42%,100%{scale:1 1}40%,41%{scale:1 .1}}
+@keyframes npc-weight-shift{0%,40%,100%{transform:rotate(0)}50%,65%{transform:rotate(-1.5deg)}}
+@keyframes leaf-drift{from{transform:translateX(0) rotate(0)}to{transform:translateX(100vw) translateY(50px) rotate(360deg)}}
+@keyframes steam-rise{0%{opacity:0;transform:translateY(8px) scale(.7)}35%{opacity:.55}100%{opacity:0;transform:translateY(-26px) scale(1.2)}}
+@keyframes sunlight{to{opacity:.4}}
+@keyframes journey-beacon{50%{box-shadow:0 0 0 7px #cbb09612}}
+@keyframes moment-enter{from{opacity:0;transform:translateX(-15px)}to{opacity:1;transform:translateX(0)}}
+@keyframes prompt-arrive{from{opacity:0;translate:0 8px}to{opacity:1;translate:0 0}}
+@keyframes moment-speech{from{opacity:0;translate:0 3px}to{opacity:1;translate:0 0}}
+@keyframes coffee-fall{0%{translate:0 0;rotate:0}100%{translate:14px 99px;rotate:95deg;opacity:.2}}
+@keyframes splash-in{from{scale:0;opacity:0}to{scale:1;opacity:1}}
+@keyframes reaction{0%{opacity:0;scale:.5}35%,80%{opacity:1;scale:1}100%{opacity:0}}
+@keyframes tray-tip{50%,100%{transform:rotate(-17deg)}}
+@keyframes scarf-drop{from{translate:0 0;rotate:0}to{translate:15px 48px;rotate:25deg}}
+@keyframes pigeon-peck{35%,60%{rotate:14deg;translate:-4px 3px}}
+@keyframes croissant-hop{50%{translate:3px -3px;rotate:8deg}}
+@keyframes dog-excited{to{translate:4px -5px}}
+@keyframes map-confusion{30%{rotate:2deg}65%{rotate:-2deg}}
+@keyframes reward-star{from{scale:.4;rotate:-40deg;opacity:0}to{scale:1;rotate:0;opacity:1}}
+@keyframes travel-background{0%,12%{transform:scale(1.01);opacity:1}62%{transform:scale(1.2) translateX(-10%);opacity:.6}100%{transform:scale(1.3) translateX(-15%);opacity:0}}
+@keyframes travel-buildings{0%,13%{opacity:0;transform:translateX(12%)}22%,55%{opacity:1}80%,100%{opacity:0;transform:translateX(-55%)}}
+@keyframes travel-road{0%,14%{transform:translateX(0)}70%,100%{transform:translateX(-23%);opacity:0}}
+@keyframes travel-goodbye{0%,12%{opacity:1;transform:translateX(0)}45%,100%{opacity:0;transform:translateX(-60%)}}
+@keyframes goodbye-wave{to{transform:rotate(-10deg) translateY(-6px)}}
+@keyframes travel-foreground{0%,12%{opacity:0}23%,65%{opacity:1}80%,100%{opacity:0}}
+@keyframes pigeon-fly{0%{transform:translateX(0) translateY(40px) rotate(-10deg)}100%{transform:translateX(100vw) translateY(-140px) rotate(-10deg)}}
+@keyframes letterbox-in{from{height:0}to{height:30px}}
+@keyframes travel-progress{from{width:0}to{width:100%}}
+@keyframes story-route{to{top:100%}}
+@keyframes bell-ring{from{rotate:-16deg}to{rotate:16deg}}
+@media(min-width:651px){.in-game .journey-strip{flex:0 0 41px}.side-conversation>.conversation-panel>.transcript{flex:1 1 0;min-height:0}.side-conversation .mic-area{padding-bottom:14px}.side-conversation .hint-panel{padding:12px}.in-game .story-timeline li{min-height:44px;padding-bottom:15px}.in-game .mission-croissant{flex-shrink:0}}
+@media(min-width:651px) and (max-height:800px){.in-game .journey-strip{height:36px;flex-basis:36px;margin-bottom:7px}.in-game .story-timeline li{min-height:40px;padding-bottom:11px;font-size:11px}.in-game .mission-croissant{width:50px;height:50px;margin:13px 0 10px}.in-game .mission-panel>p{font-size:11px}.in-game .pocket-card{display:none}.in-game .story-memories{padding-top:8px}.in-game .story-memories p{font-size:9px;margin-top:6px}.side-conversation .side-heading{padding:11px 16px 8px}.side-conversation .side-return-note{font-size:8px;padding-left:16px}.travel-narration h2{font-size:21px}}
+@media(min-width:651px) and (max-height:650px){.in-game .story-prologue{display:none}.in-game .story-memories{padding-top:7px}.in-game .story-memories>span{font-size:7px}.in-game .story-timeline li{min-height:37px}.in-game .journey-strip{height:32px;flex-basis:32px}.side-return-note{display:none}.travel-narration{padding:12px;bottom:42px}.travel-narration h2{font-size:18px}.travel-topline{top:39px;font-size:8px}.travel-step{display:none}.moment-prompt{padding:11px;top:58px;width:210px}.moment-prompt strong{font-size:15px}.moment-animation{height:155px;width:110px}.moment-actions{margin-top:8px}.story-travel{font-size:9px}}
+@media(max-width:900px){.mission-panel .story-prologue,.mission-panel .story-memories,.mission-panel .story-travel{display:none}.in-game .story-timeline li{min-height:0;padding:0;font-size:10px}.travel-narration h2{font-size:20px}.travel-step{display:none}}
+@media(max-width:650px){.journey-strip{margin-bottom:10px}.story-timeline .story-prologue{display:none}.ambient-actor{width:140px;height:185px}.moment-prompt{top:60px;right:12px;width:220px}.moment-prompt strong{font-size:16px}.moment-prompt p,.moment-actions button{font-size:11px}.moment-animation{left:2%;height:175px;width:130px}.travel-narration{left:5%;right:5%;bottom:47px;padding:14px}.travel-narration h2{font-size:21px}.side-conversation{border-left:0;border-top:1px solid var(--border);min-height:590px}.side-conversation .conversation-panel{padding-top:20px}.side-reward{min-height:500px}.travel-sidebar{min-height:300px;border-left:0;border-top:1px solid var(--border)}.travel-sidebar>svg{margin:20px 0 12px}.travel-sidebar-line{height:35px;margin-top:15px}.travel-sidebar small{margin-top:12px}}
+@media(prefers-reduced-motion:reduce){.environment-camera{transform:none!important;transition:none!important}.ambient-actor.moving{display:none}.world-layer .stationary{display:block}.travel-background,.travel-midground,.travel-pavement,.travel-goodbye,.travel-foreground{display:none}.travel-destination{opacity:1;transform:none}.travel-arrival{opacity:1;transform:none}.bakery-entry{display:none}.travel-letterbox{height:12px}.travel-progress>span{width:100%}.actor-person,.actor-leg,.npc-eye,.npc-hands{animation:none!important;transform:none}.npc-art{animation:none!important;transform:translateX(-50%);translate:none;rotate:none}.moment-animation{animation:none}}
+
+@keyframes npc-enter{from{opacity:0;translate:24px 5px;rotate:1deg}to{opacity:1;translate:0 0;rotate:0deg}}
+
+.moment-bystander{position:absolute;left:70%;bottom:5%;width:110px;height:160px;animation:bystander-react 1.5s .9s ease both}
+@keyframes bystander-react{0%,100%{translate:0 0;rotate:0deg}35%,65%{translate:4px -4px;rotate:-3deg}}
