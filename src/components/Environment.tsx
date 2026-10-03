@@ -11,7 +11,7 @@ export function Environment({scene,speaking=false,intro=false}:{scene:SceneConfi
    event.currentTarget.style.setProperty('--camera-y',`${((event.clientY-bounds.top)/bounds.height-.5)*3}px`);
  };
  return <div onPointerMove={moveCamera} onPointerLeave={event=>{event.currentTarget.style.setProperty('--camera-x','0px');event.currentTarget.style.setProperty('--camera-y','0px');}} className={`environment ${scene.environment} ${intro?'intro-environment':''}`}>
-  <div className="environment-camera"><img className="environment-bg" src={`/scenes/${scene.environment}.svg`} alt={scene.environment==='first-party'?'A warmly decorated Paris apartment ready for a small party':scene.id.startsWith('street')?'An illustrated Parisian street with cream stone buildings and wrought-iron balconies':'A warmly lit French bakery with fresh croissants and coffee'} />
+  <div className="environment-camera"><img className="environment-bg" src={`/scenes/${scene.environment}.svg`} alt={scene.environment==='first-party'?'A Paris nightclub with violet spotlights, a DJ booth, dancing guests and an amber-lit lounge bar':scene.id.startsWith('street')?'An illustrated Parisian street with cream stone buildings and wrought-iron balconies':'A warmly lit French bakery with fresh croissants and coffee'} />
   <WorldLayer scene={scene.id}/></div>
   <div className="scene-vignette"/>
   {!intro&&<div className="location-tag"><Icon name="pin" size={15}/>{scene.location}<span>PARIS, FRANCE</span></div>}
