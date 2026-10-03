@@ -269,3 +269,7 @@
 @media(min-width:901px) and (max-height:800px){.welcome-hero{padding-top:22px;padding-bottom:22px}.welcome-art{min-height:520px}.welcome-copy h1{margin:19px 0;font-size:clamp(42px,4.3vw,64px)}.welcome-description{margin:14px 0 20px}.welcome-steps{margin-top:25px;padding-top:18px}}
 @media(max-width:900px){.welcome-hero{grid-template-columns:1fr 1fr;gap:4%;padding:30px 5%}.welcome-art{min-height:580px}.welcome-copy h1{font-size:43px;letter-spacing:-1.5px}.welcome-steps{gap:10px}.welcome-reassurance{font-size:10px}.scenario-cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:650px){.welcome-hero{grid-template-columns:1fr;padding:30px 6%;gap:28px}.welcome-copy h1{font-size:clamp(40px,9vw,56px)}.welcome-description{max-width:100%}.welcome-art{min-height:480px;aspect-ratio:4/5}.welcome-steps{gap:18px}.welcome-postmark{font-size:8px}.welcome-reassurance{font-size:10px}.scenario-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.mic-button.turn-button{width:auto;min-width:156px;height:52px;padding:0 18px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:10px;touch-action:manipulation}
+.mic-button.turn-button span{font-size:13px;font-weight:600;white-space:nowrap}
+.in-game .mic-button.turn-button{width:auto;height:52px}
+.mic-button.turn-button:disabled{animation:none}
