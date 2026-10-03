@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1100" viewBox="0 0 1200 1100"><defs>
+ <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#141327"/><stop offset=".7" stop-color="#2c2347"/><stop offset="1" stop-color="#4a2f52"/></linearGradient>
+ <linearGradient id="stone" x2="1" y2="1"><stop stop-color="#4b4560"/><stop offset="1" stop-color="#2c2840"/></linearGradient>
+ <linearGradient id="road" x2="0" y2="1"><stop stop-color="#262236"/><stop offset="1" stop-color="#3d3450"/></linearGradient>
+ <linearGradient id="facade" x2="0" y2="1"><stop stop-color="#1c1a26"/><stop offset="1" stop-color="#0f0e15"/></linearGradient>
+ <radialGradient id="doorGlow" cx=".5" cy=".55" r=".6"><stop stop-color="#c04bd0" stop-opacity=".85"/><stop offset=".55" stop-color="#7a2a9a" stop-opacity=".45"/><stop offset="1" stop-color="#2b1640" stop-opacity="0"/></radialGradient>
+ <radialGradient id="lamp" cx=".5" cy=".5" r=".5"><stop stop-color="#ffd38a" stop-opacity=".55"/><stop offset="1" stop-color="#ffd38a" stop-opacity="0"/></radialGradient>
+ <linearGradient id="reflect" x2="0" y2="1"><stop stop-color="#ff5fa2" stop-opacity=".35"/><stop offset="1" stop-color="#ff5fa2" stop-opacity="0"/></linearGradient>
+ <pattern id="cobbles" width="90" height="44" patternUnits="userSpaceOnUse"><path d="M0 0h90v44H0ZM45 0v22M0 22h90M22 22v22M68 22v22" fill="none" stroke="#8a7fa6" stroke-width="1" opacity=".18"/></pattern>
+ <filter id="neon" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <filter id="soft"><feGaussianBlur stdDeviation="18"/></filter>
+</defs>
+<rect width="1200" height="1100" fill="url(#sky)"/>
+<g fill="#f4ecd0" opacity=".7"><circle cx="90" cy="60" r="1.6"/><circle cx="260" cy="110" r="1.2"/><circle cx="1010" cy="70" r="1.5"/><circle cx="1130" cy="140" r="1.1"/><circle cx="700" cy="40" r="1.3"/></g>
+<circle cx="1040" cy="120" r="34" fill="#efe6c8" opacity=".85"/><circle cx="1054" cy="110" r="30" fill="#2a2246"/>
+<!-- left Haussmann block -->
+<g><rect x="-20" y="150" width="360" height="690" fill="url(#stone)"/><path d="M-20 150h360l-20-40H0Z" fill="#221f33"/>
+ <g fill="#ffcf7a">
+  <rect x="30" y="210" width="62" height="110" opacity=".85"/><rect x="140" y="210" width="62" height="110" fill="#2a2740"/><rect x="250" y="210" width="62" height="110" opacity=".6"/>
+  <rect x="30" y="380" width="62" height="110" fill="#2a2740"/><rect x="140" y="380" width="62" height="110" opacity=".9"/><rect x="250" y="380" width="62" height="110" fill="#2a2740"/>
+ </g>
+ <g stroke="#1a1828" stroke-width="5"><path d="M20 330h300M20 500h300"/></g>
+ <g stroke="#15131f" stroke-width="3" fill="none"><path d="M24 316h74M134 316h74M244 316h74M24 486h74M134 486h74M244 486h74"/></g>
+ <rect x="-20" y="560" width="360" height="280" fill="#2a1f2c"/><path d="M-20 560h360l14 50H-34Z" fill="#7a2b3e"/>
+ <text x="160" y="596" text-anchor="middle" font-family="Georgia" font-size="24" letter-spacing="4" fill="#f0d8b0">BAR TABAC</text>
+ <rect x="20" y="640" width="130" height="200" fill="#ffb86b" opacity=".5"/><rect x="190" y="640" width="130" height="200" fill="#ffb86b" opacity=".35"/>
+</g>
+<!-- right block -->
+<g><rect x="860" y="170" width="360" height="670" fill="url(#stone)"/><path d="M860 170h360v-40H880Z" fill="#221f33"/>
+ <rect x="900" y="230" width="62" height="110" fill="#2a2740"/><rect x="1010" y="230" width="62" height="110" fill="#ffcf7a" opacity=".75"/><rect x="1120" y="230" width="62" height="110" fill="#2a2740"/>
+ <rect x="900" y="400" width="62" height="110" fill="#ffcf7a" opacity=".55"/><rect x="1010" y="400" width="62" height="110" fill="#2a2740"/><rect x="1120" y="400" width="62" height="110" fill="#ffcf7a" opacity=".8"/>
+ <g stroke="#1a1828" stroke-width="5"><path d="M880 350h330M880 520h330"/></g>
+ <rect x="860" y="580" width="360" height="260" fill="#1f2230"/><rect x="890" y="630" width="290" height="210" fill="#36405a" opacity=".6"/>
+ <text x="1035" y="612" text-anchor="middle" font-family="Arial" font-weight="700" font-size="22" letter-spacing="3" fill="#7ee0c8" filter="url(#neon)">KEBAB · 24/7</text>
+</g>
+<!-- club facade -->
+<rect x="330" y="120" width="540" height="720" fill="url(#facade)"/>
+<g fill="#2a2638"><rect x="380" y="170" width="70" height="120"/><rect x="565" y="170" width="70" height="120"/><rect x="750" y="170" width="70" height="120"/></g>
+<rect x="565" y="170" width="70" height="120" fill="#b25ad0" opacity=".35"/>
+<g filter="url(#neon)"><rect x="410" y="330" width="380" height="96" rx="14" fill="none" stroke="#ff5fa2" stroke-width="5"/>
+ <text x="600" y="396" text-anchor="middle" font-family="Georgia" font-style="italic" font-size="58" letter-spacing="6" fill="#ffd1e6">Le Velours</text></g>
+<text x="600" y="456" text-anchor="middle" font-family="Arial" font-size="14" letter-spacing="7" fill="#c9a6ff" opacity=".85">CLUB · OBERKAMPF</text>
+<ellipse cx="600" cy="660" rx="260" ry="230" fill="url(#doorGlow)"/>
+<rect x="490" y="490" width="220" height="350" rx="8" fill="#140c1c"/>
+<rect x="505" y="505" width="190" height="335" fill="#3d1650"/>
+<rect x="505" y="505" width="190" height="335" fill="url(#doorGlow)"/>
+<path d="M505 505h190" stroke="#d58cff" stroke-width="3" opacity=".7"/>
+<!-- small dress-code plaque -->
+<rect x="728" y="560" width="96" height="70" rx="4" fill="#d7c08a"/><rect x="733" y="565" width="86" height="60" rx="3" fill="none" stroke="#8a7445" stroke-width="2"/>
+<text x="776" y="585" text-anchor="middle" font-family="Georgia" font-size="11" fill="#3a2f18">TENUE</text><text x="776" y="600" text-anchor="middle" font-family="Georgia" font-size="11" fill="#3a2f18">CORRECTE</text><text x="776" y="615" text-anchor="middle" font-family="Georgia" font-size="11" fill="#3a2f18">EXIGÉE</text>
+<!-- street -->
+<rect y="840" width="1200" height="260" fill="url(#road)"/><rect y="840" width="1200" height="260" fill="url(#cobbles)"/>
+<rect y="830" width="1200" height="18" fill="#1a1726"/>
+<path d="M410 850h380l60 250H350Z" fill="url(#reflect)"/>
+<ellipse cx="600" cy="905" rx="300" ry="32" fill="#c04bd0" opacity=".18" filter="url(#soft)"/>
+<!-- velvet rope -->
+<g><path d="M300 870q60 48 120 0" fill="none" stroke="#9b1d3a" stroke-width="12" stroke-linecap="round"/><path d="M780 870q60 48 120 0" fill="none" stroke="#9b1d3a" stroke-width="12" stroke-linecap="round"/>
+ <g fill="#d8b25a"><rect x="292" y="860" width="16" height="130" rx="6"/><circle cx="300" cy="855" r="14"/><ellipse cx="300" cy="992" rx="34" ry="9"/>
+ <rect x="412" y="860" width="16" height="130" rx="6"/><circle cx="420" cy="855" r="14"/><ellipse cx="420" cy="992" rx="34" ry="9"/>
+ <rect x="772" y="860" width="16" height="130" rx="6"/><circle cx="780" cy="855" r="14"/><ellipse cx="780" cy="992" rx="34" ry="9"/>
+ <rect x="892" y="860" width="16" height="130" rx="6"/><circle cx="900" cy="855" r="14"/><ellipse cx="900" cy="992" rx="34" ry="9"/></g></g>
+<!-- queue silhouettes -->
+<g fill="#120f1c" opacity=".85"><circle cx="70" cy="735" r="22"/><path d="M40 760q30-14 60 0l8 120H32Z"/><circle cx="135" cy="728" r="20"/><path d="M108 752q27-12 54 0l6 128h-66Z"/><circle cx="196" cy="740" r="19"/><path d="M170 762q26-11 52 0l6 118h-64Z"/></g>
+<!-- street lamp -->
+<g><circle cx="1110" cy="560" r="120" fill="url(#lamp)"/><rect x="1104" y="575" width="12" height="380" fill="#151320"/><path d="M1086 545h48l-10 34h-28Z" fill="#151320"/><rect x="1094" y="552" width="32" height="20" fill="#ffd38a"/></g>
+</svg>

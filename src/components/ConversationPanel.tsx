@@ -10,7 +10,7 @@ export function ConversationPanel({scene,hintLevel,onHint,voice}:{scene:SceneCon
  {voice.error&&<div className="voice-error" role="alert"><p>{voice.error}</p><button onClick={()=>void voice.connect()}><Icon name="retry" size={14}/>Retry connection</button></div>}
  {voice.audioBlocked&&<button className="audio-unlock" onClick={()=>void voice.enableAudio()}><Icon name="sound" size={16}/>Enable microphone & sound</button>}
  {voice.notice&&<p className="capture-notice" role="status">{voice.notice}</p>}
- <MicrophoneButton muted={voice.muted} status={voice.status} name={scene.npcName} level={voice.level} connect={()=>void voice.connect()} toggleMute={voice.toggleMute}/>
+ <MicrophoneButton muted={voice.muted} status={voice.status} name={scene.npcName} salutation={scene.id.startsWith('club_')?'bonsoir':'bonjour'} level={voice.level} connect={()=>void voice.connect()} toggleMute={voice.toggleMute}/>
 
  <HintPanel scene={scene} level={hintLevel} onHint={onHint}/><div className="conversation-footer"><Icon name="headphones" size={14}/> Headphones make Paris sound even better.</div></aside>
 }
