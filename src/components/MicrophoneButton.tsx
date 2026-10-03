@@ -18,7 +18,7 @@ export function MicrophoneButton({status,name,level,connect,toggleMute,muted}:Pr
     speaking: `${name} is speaking…`
   };
   return <div className={`mic-area ${status}`}>
-    <div className="waveform" aria-hidden="true">{Array.from({length:21},(_,i)=><span key={i} style={{height:!muted&&!offline&&status!=='connecting'?`${5+level*35*Math.abs(Math.sin(i*1.7))}px`:undefined,animationDelay:`${i*45}ms`}}/>)}</div>
+    {!muted&&<div className="waveform" aria-hidden="true">{Array.from({length:21},(_,i)=><span key={i} style={{height:!offline&&status!=='connecting'?`${5+level*35*Math.abs(Math.sin(i*1.7))}px`:undefined,animationDelay:`${i*45}ms`}}/>)}</div>}
     <button className="mic-button" aria-label={offline?`Connect to ${name}`:muted?'Unmute microphone':'Mute microphone'} aria-pressed={!offline&&!muted} disabled={busy}
       onClick={offline?connect:toggleMute}>
       <Icon name={muted?'close':'mic'} size={29}/>
