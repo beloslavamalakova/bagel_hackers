@@ -1,46 +1,46 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1100" viewBox="0 0 1200 1100">
-  <defs>
-    <linearGradient id="wall" x2="0" y2="1"><stop stop-color="#e9d6b9"/><stop offset="1" stop-color="#c8a984"/></linearGradient>
-    <linearGradient id="night" x2="0" y2="1"><stop stop-color="#42596c"/><stop offset="1" stop-color="#82928b"/></linearGradient>
-    <radialGradient id="lamp"><stop stop-color="#ffe4a6" stop-opacity=".8"/><stop offset="1" stop-color="#ffe4a6" stop-opacity="0"/></radialGradient>
-    <pattern id="floor" width="130" height="70" patternUnits="userSpaceOnUse"><path d="M0 0h130v70H0ZM65 0v35M0 35h130M32 35v35M98 35v35" fill="none" stroke="#765a46" stroke-opacity=".2" stroke-width="2"/></pattern>
-    <filter id="soft"><feGaussianBlur stdDeviation="16"/></filter>
-  </defs>
-  <rect width="1200" height="1100" fill="url(#wall)"/>
-  <path d="M0 0h1200v110H0Z" fill="#645244"/>
-  <path d="M0 99h1200v22H0Z" fill="#9b7956"/>
-  <rect x="0" y="122" width="1200" height="610" fill="#e4cfb1"/>
-  <path d="M0 730h1200v370H0Z" fill="#98795b"/>
-  <rect x="0" y="730" width="1200" height="370" fill="url(#floor)"/>
-  <ellipse cx="602" cy="440" rx="430" ry="340" fill="url(#lamp)" filter="url(#soft)"/>
-  <rect x="62" y="185" width="230" height="390" rx="112" fill="#65786d"/>
-  <rect x="82" y="210" width="190" height="340" rx="94" fill="url(#night)"/>
-  <path d="M177 211v339M82 381h190" stroke="#decba9" stroke-width="12"/>
-  <path d="m115 284 5-14 5 14 14 5-14 5-5 14-5-14-14-5Zm92 56 4-11 4 11 11 4-11 4-4 11-4-11-11-4Zm-72 112 4-11 4 11 11 4-11 4-4 11-4-11-11-4Z" fill="#f1d7a5" opacity=".8"/>
-  <rect x="45" y="574" width="265" height="30" rx="6" fill="#76533c"/>
-  <path d="M78 574q15-84 31 0m20 0q15-100 31 0m19 0q15-80 30 0m20 0q15-94 31 0" fill="#728369"/>
-  <path d="M120 175 106 58M278 177l-14-119M451 170 472 54M635 169 620 48M817 169 839 54M1010 175 997 55" stroke="#75634e" stroke-width="4"/>
-  <path d="m100 64 53 42 55-48 59 46 58-49 59 47 58-49 57 48 59-49 60 47 60-50 58 46 60-48 59 46 57-51" fill="none" stroke="#a34f42" stroke-width="7"/>
-  <path d="m135 91 37 30 37-30m72-1 37 30 37-30m72-1 37 30 37-30m72-1 37 30 37-30m72-1 37 30 37-30m72-1 37 30 37-30" fill="#d7aa6e" stroke="#9a644b" stroke-width="2"/>
-  <g fill="#d9a54f" stroke="#a56f48" stroke-width="4">
-    <path d="M445 255q-60-56 0-105 60 49 0 105Zm-50-2q-73-32-44-100 69 35 44 100Zm100 0q73-32 44-100-69 35-44 100Z"/>
-    <path d="M445 270v100"/>
-  </g>
-  <g transform="translate(820 227)">
-    <path d="M0 80h270v250H0Z" fill="#729078"/>
-    <path d="M20 80h230v162H20Z" fill="#d5b68a"/>
-    <path d="M35 112q49-72 94 0 44-71 99 0v120H35Z" fill="#8f6848"/>
-    <path d="M0 80h270v34H0Z" fill="#b77b58"/>
-    <text x="135" y="65" text-anchor="middle" font-family="Georgia,serif" font-size="30" fill="#5c4434">BONSOIR !</text>
-  </g>
-  <rect x="355" y="610" width="515" height="36" rx="8" fill="#76533c"/>
-  <path d="M385 646v130m455-130v130" stroke="#76533c" stroke-width="18"/>
-  <path d="M422 593q38-63 77 0Zm108 0q38-72 77 0Zm112 0q38-58 77 0Z" fill="#d59f65"/>
-  <path d="M450 587q14-28 28 0m91-1q14-32 28 0m83 0q14-26 28 0" fill="none" stroke="#f1d39d" stroke-width="5"/>
-  <rect x="926" y="683" width="196" height="18" rx="9" fill="#72543d"/>
-  <path d="M955 700v144m136-144v144" stroke="#72543d" stroke-width="14"/>
-  <circle cx="979" cy="654" r="37" fill="#f3e3c7"/>
-  <path d="M1016 644q38-2 21 32h-22" fill="none" stroke="#f3e3c7" stroke-width="11"/>
-  <path d="M946 651q34-29 67 0" fill="none" stroke="#694a36" stroke-width="7"/>
-  <path d="M0 914q205-60 410 0t410 0q190-56 380 0v186H0Z" fill="#795b45" opacity=".13"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1100" viewBox="0 0 1200 1100" role="img" aria-labelledby="title desc">
+ <title id="title">Club Minuit, Paris</title><desc id="desc">A midnight blue nightclub with violet spotlights, a DJ booth, dancers and an amber-lit lounge bar.</desc>
+ <defs>
+  <linearGradient id="room" x2="0" y2="1"><stop stop-color="#121222"/><stop offset=".65" stop-color="#25223f"/><stop offset="1" stop-color="#111724"/></linearGradient>
+  <linearGradient id="floor" x2="0" y2="1"><stop stop-color="#29213c"/><stop offset="1" stop-color="#111722"/></linearGradient>
+  <linearGradient id="beam" x2="0" y2="1"><stop stop-color="#ab87ee" stop-opacity=".28"/><stop offset="1" stop-color="#ab87ee" stop-opacity="0"/></linearGradient>
+  <linearGradient id="pinkbeam" x2="0" y2="1"><stop stop-color="#e68fac" stop-opacity=".23"/><stop offset="1" stop-color="#e68fac" stop-opacity="0"/></linearGradient>
+  <linearGradient id="bar" x2="0" y2="1"><stop stop-color="#f0b56b"/><stop offset="1" stop-color="#a97956"/></linearGradient>
+  <radialGradient id="haze"><stop stop-color="#8c69b9" stop-opacity=".3"/><stop offset="1" stop-color="#8c69b9" stop-opacity="0"/></radialGradient>
+  <filter id="glow" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur stdDeviation="8"/></filter>
+  <pattern id="acoustic" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M0 0v32" stroke="#615273" stroke-opacity=".18" stroke-width="2"/></pattern>
+  <g id="bottle"><rect x="0" y="0" width="12" height="40" rx="3" fill="#75969b"/><path d="M4 0v-12h4V0" fill="#96afb0"/><rect x="2" y="15" width="8" height="13" fill="#d8b692"/></g>
+  <g id="dancer"><ellipse cy="128" rx="32" ry="7" fill="#080e1a" opacity=".4"/><circle cy="-15" r="16" fill="#b68c81"/><path d="M-15 0q15-8 30 0l12 57-51 0Z" fill="currentColor"/><path d="m-10 55-12 65m30-65 18 64" stroke="#151827" stroke-width="14" stroke-linecap="round"/><path d="m-14 8-25-19-11-25M14 9l29 14 14-24" fill="none" stroke="#b68c81" stroke-width="9" stroke-linecap="round"/></g>
+ </defs>
+ <style>
+  .light{transform-box:fill-box;transform-origin:50% 0;animation:sweep 14s ease-in-out infinite alternate}.light.second{animation-delay:-7s;animation-duration:19s}.dance{transform-box:fill-box;transform-origin:50% 100%;animation:sway 3.8s ease-in-out infinite alternate}.dance.other{animation-delay:-1.7s;animation-duration:4.7s}
+  @keyframes sweep{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}@keyframes sway{from{transform:rotate(-2deg)}to{transform:rotate(2deg)}}@media(prefers-reduced-motion:reduce){.light,.dance{animation:none}}
+ </style>
+ <rect width="1200" height="1100" fill="url(#room)"/>
+ <path d="M0 0h1200v130H0Z" fill="#0e1320"/>
+ <path d="m0 132 230 100h740l230-100M230 230v500M970 230v500" fill="none" stroke="#4d415e" stroke-width="3"/>
+ <rect x="230" y="230" width="740" height="500" fill="url(#acoustic)"/>
+ <path d="M0 730h1200v370H0Z" fill="url(#floor)"/>
+ <path d="M230 730 0 1100m380-370-90 370m240-370 90 370m150-370 230 370M0 820h1200M0 950h1200" stroke="#695677" stroke-opacity=".17" stroke-width="2"/>
+ <ellipse cx="605" cy="590" rx="560" ry="500" fill="url(#haze)"/>
+ <g class="light"><path d="M278 138 20 960h720Z" fill="url(#beam)"/></g>
+ <g class="light second"><path d="M910 138 550 960h650Z" fill="url(#pinkbeam)"/></g>
+ <path d="M180 126h830M250 102v46m230-46v46m230-46v46m230-46v46" stroke="#454353" stroke-width="9"/>
+ <g fill="#161c2a" stroke="#645578" stroke-width="3"><rect x="250" y="130" width="55" height="30" rx="7"/><rect x="887" y="130" width="55" height="30" rx="7"/><rect x="470" y="130" width="40" height="25" rx="5"/><rect x="700" y="130" width="40" height="25" rx="5"/></g>
+ <g text-anchor="middle" font-family="Arial,sans-serif"><text x="600" y="320" fill="#bd9ee8" font-size="58" letter-spacing="13" filter="url(#glow)">MINUIT</text><text x="600" y="320" fill="#e1caf6" font-size="58" letter-spacing="13">MINUIT</text><text x="600" y="356" fill="#aaa0bb" font-size="12" letter-spacing="8">PARIS · MUSIQUE &amp; RENCONTRES</text></g>
+ <g transform="translate(306 406)"><rect width="68" height="223" rx="6" fill="#121723" stroke="#484156" stroke-width="3"/><circle cx="34" cy="49" r="21" fill="#252739" stroke="#4a3c59"/><circle cx="34" cy="150" r="27" fill="#252739" stroke="#4a3c59"/><circle cx="34" cy="150" r="11" fill="#151a28"/></g>
+ <g transform="translate(825 406)"><rect width="68" height="223" rx="6" fill="#121723" stroke="#484156" stroke-width="3"/><circle cx="34" cy="49" r="21" fill="#252739" stroke="#4a3c59"/><circle cx="34" cy="150" r="27" fill="#252739" stroke="#4a3c59"/><circle cx="34" cy="150" r="11" fill="#151a28"/></g>
+ <g transform="translate(600 466)"><circle cy="-24" r="23" fill="#b18d84"/><path d="M-23-32q4-35 44-6" fill="#151727"/><path d="M-25-22q0-29 48-2" fill="none" stroke="#b9abc8" stroke-width="5"/><path d="M-26 0q26-13 52 0l11 65h-75Z" fill="#2e3049"/><path d="m-24 12-28 39m76-39 30 37" stroke="#b18d84" stroke-width="11" stroke-linecap="round"/></g>
+ <rect x="397" y="505" width="405" height="28" rx="4" fill="#48415a"/>
+ <rect x="420" y="495" width="352" height="18" rx="4" fill="#161d2b"/><g fill="#ac97cf"><circle cx="470" cy="504" r="5"/><circle cx="530" cy="504" r="5"/><circle cx="710" cy="504" r="5"/></g>
+ <rect x="400" y="533" width="400" height="128" fill="#1b2031"/><path d="M406 552h388M406 632h388" stroke="#b797df" stroke-opacity=".7" stroke-width="3"/>
+ <text x="600" y="601" text-anchor="middle" font-family="Arial" font-size="13" letter-spacing="7" fill="#b3a6c8">LE SON DE PARIS</text>
+ <g transform="translate(43 410)"><rect width="199" height="240" rx="5" fill="#201d2c"/><rect x="10" y="10" width="179" height="145" fill="#a7836440"/><path d="M12 67h175m-175 71h175" stroke="#bb9769" stroke-width="4"/><use href="#bottle" x="30" y="26"/><use href="#bottle" x="64" y="26"/><use href="#bottle" x="100" y="26"/><use href="#bottle" x="149" y="26"/><use href="#bottle" x="46" y="97"/><use href="#bottle" x="83" y="97"/><use href="#bottle" x="127" y="97"/><rect x="-14" y="157" width="226" height="16" rx="4" fill="#c6a47e"/><rect x="-7" y="173" width="212" height="166" fill="#332938"/><rect x="-2" y="180" width="202" height="5" fill="url(#bar)"/><text x="98" y="220" text-anchor="middle" font-family="Georgia" font-size="22" fill="#d2b497">LE BAR</text></g>
+ <g transform="translate(956 553)"><rect width="227" height="153" rx="16" fill="#594256"/><rect y="57" width="227" height="123" rx="15" fill="#463347"/><path d="M20 78h186M74 7v70m78-70v70" stroke="#936b83" stroke-opacity=".5" stroke-width="3"/><path d="M17 178v35m194-35v35" stroke="#131724" stroke-width="12"/></g>
+ <g transform="translate(1039 778)"><ellipse rx="103" ry="26" fill="#6c5264"/><ellipse cy="-5" rx="103" ry="26" fill="#937181"/><path d="M0 14v143" stroke="#353040" stroke-width="13"/><ellipse cy="157" rx="47" ry="9" fill="#282835"/><path d="M-42-44h20l-4 38h-12Zm62-6h20l-4 39H24Z" fill="#ddb599" opacity=".85"/><path d="m-33-40 7-27m55 22 8-23" stroke="#c2c2ad" stroke-width="3"/></g>
+ <g transform="translate(287 736) scale(.78)"><g class="dance" color="#715681"><use href="#dancer"/></g></g>
+ <g transform="translate(413 713) scale(.64)"><g class="dance other" color="#a37587"><use href="#dancer"/></g></g>
+ <g transform="translate(858 747) scale(.83)"><g class="dance other" color="#687a95"><use href="#dancer"/></g></g>
+ <g transform="translate(965 883) scale(1.13)"><g class="dance" color="#49394f" opacity=".9"><use href="#dancer"/></g></g>
+ <path d="M0 998q285-102 545-24t655-29v155H0Z" fill="#0b111e" opacity=".36"/>
 </svg>

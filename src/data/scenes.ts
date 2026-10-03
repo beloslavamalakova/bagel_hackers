@@ -30,14 +30,14 @@ export const scenes: Record<TaskId, SceneConfig> = {
     transition:'One golden croissant. One café. One well-earned pause.', voice:'Aoede', feedback:'You placed an order and answered a follow-up.'
   },
   party_arrival: {
-    id:'party_arrival', npcName:'Emma', npcRole:'a friendly host welcoming a new guest to her small apartment party',
+    id:'party_arrival', npcName:'Emma', npcRole:'a friendly host welcoming a new guest to Club Minuit',
     title:'Arrive at your first party', objective:'Greet the host and introduce yourself.',
     context:'You made it to the party. A friendly host opens the door and welcomes you in.',
     successCriteria:'The learner greets you and introduces themselves or says their name in understandable beginner French. Welcome them warmly, tell them you are Emma, and invite them inside. Accept simple or imperfect French. Do not require an exact memorized sentence.',
     hintWords:['bonjour','m’appelle','je','suis'], fullHint:'Bonjour ! Je m’appelle…',
-    greeting:'Bonsoir ! Bienvenue !', location:'An apartment in Le Marais', environment:'first-party',
+    greeting:'Bonsoir ! Bienvenue !', location:'Club Minuit · Le Marais', environment:'first-party',
     transition:'Emma welcomes you in. The party is just getting started.', voice:'Kore', feedback:'You introduced yourself at the party.',
-    languageLevel:'A1', localKnowledge:'This is Emma’s relaxed apartment party in Le Marais. Guests are friendly and happy to meet someone new. There is music, juice, and simple snacks.'
+    languageLevel:'A1', localKnowledge:'This is a friendly beginner night at Club Minuit in Le Marais. Guests are friendly and happy to meet someone new. There is a DJ, a dance floor, soft drinks, and a quieter lounge for conversation.'
   },
   party_meet_someone: {
     id:'party_meet_someone', npcName:'Lucas', npcRole:'a friendly guest who has just arrived at the party',
@@ -45,9 +45,9 @@ export const scenes: Record<TaskId, SceneConfig> = {
     context:'There are new faces everywhere. Lucas smiles and introduces himself.',
     successCriteria:'The learner asks your name OR where you are from in understandable beginner French. Answer naturally with a short A1 sentence: Je m’appelle Lucas. Je viens de Lyon. Then ask one simple question back, such as Et vous ? Accept imperfect grammar and do not require both questions.',
     hintWords:['comment','vous','appelez','vous','venez','d’où'], fullHint:'Comment vous appelez-vous ? Vous venez d’où ?',
-    greeting:'Salut ! Moi, c’est Lucas. Et vous ?', location:'The living room', environment:'first-party',
+    greeting:'Salut ! Moi, c’est Lucas. Et vous ?', location:'The club lounge', environment:'first-party',
     transition:'You have a new name to remember—and someone to talk to.', voice:'Puck', feedback:'You met someone new in French.',
-    languageLevel:'A1', localKnowledge:'This is Emma’s relaxed apartment party in Le Marais. Lucas is a guest from Lyon. Guests are friendly and conversations are informal.'
+    languageLevel:'A1', localKnowledge:'This is a friendly beginner night at Club Minuit in Le Marais. Lucas is a guest from Lyon. Guests are friendly and conversations are informal.'
   },
   party_join_chat: {
     id:'party_join_chat', npcName:'Inès', npcRole:'a warm party guest chatting about music and snacks',
@@ -55,9 +55,9 @@ export const scenes: Record<TaskId, SceneConfig> = {
     context:'Music is playing and snacks are on the table. Inès invites you into the conversation.',
     successCriteria:'The learner communicates one thing they like or want at the party, such as music, dancing, or a snack, and asks a relevant simple question or responds to your question in understandable beginner French. Keep turns short and encouraging; accept beginner mistakes. After a meaningful exchange, warmly say you are glad they came and call complete_task.',
     hintWords:['j’aime','la musique','je voudrais','un jus','et vous'], fullHint:'J’aime la musique ! Et vous ?',
-    greeting:'Tu aimes la musique ?', location:'The party living room', environment:'first-party',
+    greeting:'Tu aimes la musique ?', location:'Beside the dance floor', environment:'first-party',
     transition:'The conversation flows, and the party starts to feel like yours.', voice:'Aoede', feedback:'You joined the party conversation in French.',
-    languageLevel:'A1', localKnowledge:'This is Emma’s relaxed apartment party in Le Marais. Inès enjoys music and dancing. There is juice and simple snacks on the table.'
+    languageLevel:'A1', localKnowledge:'This is a friendly beginner night at Club Minuit in Le Marais. Inès enjoys music and dancing. There are soft drinks and simple snacks in the quieter lounge.'
   },
   club_refused: {
     id:'club_refused', npcName:'Karim',
