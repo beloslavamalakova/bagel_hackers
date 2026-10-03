@@ -33,8 +33,9 @@ wss.on('connection', (socket, req) => {
   try{if (origin && new URL(origin).host !== req.headers.host) { socket.close(1008,'Origin not allowed'); return; }}
   catch{socket.close(1008,'Invalid origin');return;}
   let session: Session | undefined;
-  let ended = false, starting = false, ready = false, completed = false, recording = false;
-  let learnerTurns = 0, audioDurationMs = 0;
+  let ended = false, starting = false, ready = false, completed = false;
+  let learnerTurns = 0;
+  let recording=false,audioDurationMs=0;
   const send = (value: object) => { if(socket.readyState === WebSocket.OPEN) socket.send(JSON.stringify(value)); };
   const fail = (message: string) => send({type:'error',message});
   const cleanup = () => { ended=true; ready=false; session?.close(); session=undefined; };
@@ -59,7 +60,9 @@ wss.on('connection', (socket, req) => {
             for(const part of content.modelTurn?.parts ?? []) {
               if(part.inlineData?.data && part.inlineData.mimeType?.startsWith('audio/pcm')) send({type:'audio',data:part.inlineData.data,mimeType:part.inlineData.mimeType});
             }
-            if(content.inputTranscription?.text) send({type:'transcript',speaker:'you',text:content.inputTranscription.text});
+            if(content.inputTranscription?.text?.trim()) {
+              send({type:'transcript',speaker:'you',text:content.inputTranscription.text});
+            }
             if(content.outputTranscription?.text) send({type:'transcript',speaker:'npc',text:content.outputTranscription.text});
             if(content.interrupted) send({type:'interrupted'});
             if(content.turnComplete) send({type:'turn_complete'});
@@ -84,17 +87,17 @@ wss.on('connection', (socket, req) => {
         session=connected; ready=true; clearTimeout(initTimeout); send({type:'ready'});
         session.sendClientContent({turns:[{role:'user',parts:[{text:'The learner has arrived. Greet them in character with your opening French line, then wait. This is not a learner objective attempt.'}]}],turnComplete:true});
       } else if(ready && session && !completed) {
-        if(msg.type === 'activity_start' && !recording) {
-          recording=true; audioDurationMs=0; session.sendRealtimeInput({activityStart:{}});
+        if(msg.type === 'activity_start'&&!recording){
+          recording=true;audioDurationMs=0;session.sendRealtimeInput({activityStart:{}});
         } else if(msg.type === 'audio' && recording && typeof msg.data === 'string' && msg.data.length <= 100000) {
           const audio = parseAudioChunk(msg.data,msg.sampleRate);
           audioDurationMs+=audio.durationMs;
           session.sendRealtimeInput({audio:{data:audio.data,mimeType:audio.mimeType}});
-        } else if(msg.type === 'activity_end' && recording) {
+        } else if(msg.type === 'activity_end'&&recording) {
           recording=false;
-          if(audioDurationMs >= 600) learnerTurns++;
-          send({type:'capture_received',durationMs:audioDurationMs});
+          if(audioDurationMs>=250)learnerTurns++;
           session.sendRealtimeInput({activityEnd:{}});
+          send({type:'capture_received',durationMs:audioDurationMs});
         }
       }
     } catch {

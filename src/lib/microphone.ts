@@ -4,6 +4,8 @@ export interface CaptureResult extends CaptureStats { chunks: Float32Array[] }
 /** Keep capture and its ordered flush separate from React renders and NPC audio events. */
 export class MicrophoneCapture {
   private accepting = false;
+  private retainAudio = true;
+  private ownsContext = true;
   private finishing = false;
   private chunks: Float32Array[] = [];
   private samples = 0;
@@ -22,7 +24,7 @@ export class MicrophoneCapture {
     node.port.onmessage = event => {
       if (event.data.type === 'audio' && this.accepting) {
         const samples = event.data.samples as Float32Array;
-        this.chunks.push(samples);
+        if(this.retainAudio)this.chunks.push(samples);
         this.samples += samples.length;
         for (const value of samples) { this.energy += value * value; this.peak = Math.max(this.peak, Math.abs(value)); }
         this.onSamples(samples, this.stats);
@@ -35,22 +37,25 @@ export class MicrophoneCapture {
       }
     };
   }
-  static async create(onSamples: (samples: Float32Array, stats: CaptureStats) => void) {
+  static async create(onSamples: (samples: Float32Array, stats: CaptureStats) => void, sharedContext?:AudioContext) {
     if (!navigator.mediaDevices?.getUserMedia) throw new Error('Microphone access needs localhost or HTTPS.');
     const stream = await navigator.mediaDevices.getUserMedia({audio:{channelCount:1,echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});
     let context: AudioContext | undefined;
     try {
-      context = new AudioContext();
+      context = sharedContext ?? new AudioContext();
       await context.audioWorklet.addModule('/pcm-capture.js');
       const source = context.createMediaStreamSource(stream);
       const node = new AudioWorkletNode(context,'pcm-capture');
       const silent = context.createGain(); silent.gain.value = 0;
       source.connect(node); node.connect(silent); silent.connect(context.destination);
-      return new MicrophoneCapture(context,stream,source,node,silent,onSamples);
-    } catch(error) { stream.getTracks().forEach(track=>track.stop());if(context)void context.close();throw error; }
+      const capture=new MicrophoneCapture(context,stream,source,node,silent,onSamples);
+      capture.ownsContext=!sharedContext;
+      return capture;
+    } catch(error) { stream.getTracks().forEach(track=>track.stop());if(context&&!sharedContext)void context.close();throw error; }
   }
   get stats(): CaptureStats { return {durationMs:this.samples/this.context.sampleRate*1000,rms:Math.sqrt(this.energy/Math.max(1,this.samples)),peak:this.peak,sampleRate:this.context.sampleRate}; }
-  async start() {
+  async start(retainAudio = true) {
+    this.retainAudio = retainAudio;
     if (this.accepting || this.finishing) return;
     await this.context.resume();
     this.chunks=[];this.samples=0;this.energy=0;this.peak=0;
@@ -73,6 +78,6 @@ export class MicrophoneCapture {
     if(this.stopWaiter){clearTimeout(this.stopWaiter.timer);this.stopWaiter.reject(new Error('Recording closed.'));this.stopWaiter=undefined;}
     this.node.port.onmessage=null;
     this.source.disconnect();this.node.disconnect();this.silent.disconnect();
-    this.stream.getTracks().forEach(track=>track.stop());void this.context.close();
+    this.stream.getTracks().forEach(track=>track.stop());if(this.ownsContext)void this.context.close();
   }
 }

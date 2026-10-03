@@ -25,7 +25,7 @@ GEMINI_API_KEY=your_google_gemini_api_key_here
 npm run dev
 ```
 
-Open **http://localhost:5173**. Start the adventure, click **Say bonjour to Camille**, then allow the microphone when prompted. Allow the microphone during connection setup. Click the mic once to start, say your full sentence, then click again to send. Space/Enter also toggles the focused button. Pauses and releasing the mouse do not stop recording; the safety limit is 60 seconds. Subsequent encounters connect automatically once voice has been enabled.
+Open **http://localhost:5173**. Start the adventure and allow microphone access. The microphone stays open throughout each conversation and reconnects automatically for the next NPC. Speak naturally and pause for a response; speak over a character to interrupt them. The mic button toggles mute, not turn submission.
 
 Only localhost or HTTPS supports browser microphone access. Chrome/Edge are recommended; Safari with AudioWorklet support also works. Headphones prevent NPC audio from feeding back into the microphone. Internet access and key access to **`gemini-3.8-live`** are required; the app never silently substitutes another model or fake conversation.
 
@@ -70,7 +70,7 @@ scripts/build.mjs            Production bundle
 
 The browser connects to `/live` on the same origin. The server chooses the NPC's trusted local configuration and creates a Live session using **`gemini-3.8-live`** with native AUDIO responses. It enables input/output transcription and declares `complete_task`. No API key, system prompt, or arbitrary client-selected model is sent to the browser.
 
-Click-to-start / click-to-send uses `activityStart` / `activityEnd` with automatic activity detection disabled. An **AudioWorklet** captures microphone samples off the UI thread; samples are encoded as mono signed 16-bit little-endian PCM at the actual AudioContext sample rate, reported in the MIME type. Gemini performs its own resampling. A short prefix is buffered so very short clicks and nearly silent recordings are not sent as hallucination-prone turns. The server relays this directly to Gemini. Native 24 kHz PCM responses are decoded and scheduled consecutively with Web Audio, avoiding overlapping chunks. Capture ends only after the AudioWorklet acknowledges that its final chunk was flushed; NPC events cannot stop an active learner recording. Every part in each Live event is processed. There is no browser speech recognition or separate TTS layer.
+The Start button primes a shared Web Audio context before React mounts the first encounter. Capture and NPC playback reuse that unlocked graph across scenes, so microphone permissions and autoplay policies do not silently suspend a second context. The AudioWorklet continuously captures mono PCM. A lightweight client voice detector uses a 350 ms pre-speech buffer, 100 ms onset confirmation, adaptive noise thresholds and 1.2 seconds of silence to end a turn. It sends ordered activityStart → PCM → activityEnd to Gemini with server VAD disabled, following [Google's manual VAD guidance](https://ai.google.dev/gemini-api/docs/live-api/capabilities#disable-automatic-vad). Speaking starts a turn and immediately clears NPC playback; incoming audio is discarded while the learner speaks. No microphone clicks are needed. The waveform reflects actual captured microphone levels even during NPC playback. Muting or entering an optional encounter finishes the active turn and pauses forwarding; unmuting resumes detection. Scene completion guards count submitted speech turns and still rely on Gemini to judge semantic success. Continuous audio is not retained in memory.
 
 Each encounter supplies its name, role, objective, local knowledge, semantic success criteria, and beginner French behavior. Grammar and wording need not match the hints. The bakery explicitly requires an order **and a separate “sur place / à emporter” answer**. Léa is open-ended and should finish after three meaningful learner contributions.
 
@@ -114,7 +114,6 @@ Each scene has three hint states: no hint, scrambled word chips, and a useful se
 - **Disconnected Gemini / no response:** a clear error and retry reconnect the current encounter. Retrying begins a fresh NPC conversation; repeat any unfinished request or order.
 - **Blocked playback:** use **Enable sound**. Text and mission state remain available.
 - **Network interruption:** no crash or automatic task completion.
-- **Microphone diagnosis:** in `?dev=true`, the conversation panel shows recorded duration, peak/RMS volume, and server-received duration. After a turn, **Hear my last recording** plays the actual local capture without sending it to Gemini. If it is silent or clipped, check the microphone; if it is clear and server duration matches, the remaining issue is downstream recognition.
 - **Development controls:** open **http://localhost:5173/?dev=true** for a small bottom-left panel: mark complete / skip, restart current scene, or reset. Skipping uses the same completion transition as the normal journey. These controls are compiled out of production builds, even with `?dev=true`.
 
 ## Verification and remaining live checks
@@ -124,7 +123,7 @@ Each scene has three hint states: no hint, scrambled word chips, and a useful se
 The implementation environment prevents opening local listening sockets and starting Chrome. A key was added locally after initial setup, but the attempted external Live WebSocket check could not establish a session from this environment. Therefore a live microphone session, audible Gemini responses, semantic completion accuracy, and the browser visual acceptance test could not be verified here. The code includes the real Live integration; it is not backed by a simulated agent. Run the checklist below with your key before presenting.
 
 1. Start the app; inspect the intro on desktop and mobile; start the adventure.
-2. Connect to Camille and allow the microphone. Speak French; confirm an audible French reply and transcript.
+2. Start and allow the microphone. Without clicking the mic, speak French; confirm an audible reply. Interrupt Camille mid-sentence and check that old audio stops immediately. Pause briefly inside a sentence, then continue.
 3. Click **Need a hint?**, then **Show me the sentence**. Neither click should complete the task.
 4. Try “Vous connaissez une bonne boulangerie ?” rather than the hint sentence. Confirm Maison Lumière is recommended and the scene automatically advances.
 5. Ask Julien how to reach Maison Lumière. Confirm short directions and arrival at the bakery.
@@ -150,7 +149,7 @@ The world now uses layered React/SVG/CSS choreography, with no physics engine or
 - **Short side conversations:** choosing an available moment opens a separate Gemini Live session through the same proven capture/playback hook. The main session remains connected and idle, retaining its context. A server-validated local side-event ID selects a concise prompt; an invalid event/location is rejected. One meaningful French utterance can earn a star. The UI returns automatically after success or at most two submitted turns, and you can leave at any time. Side completion updates only optional memories, never mission progress.
 - **Visible consequences:** the journey strip shows your next location; the story sidebar records recommendations, directions, orders and optional acts of kindness. Travel is triggered by the NPC's accepted completion action, not hint clicks. Earned Paris memories appear on the final screen.
 
-The working microphone capture, sample-rate handling, ordered worklet flush, speech transport, native model, and main mission completion criteria remain intact. The hook's only integration extension is an optional side-event ID in session setup. Main sessions omit this field and retain their existing configuration.
+Optional conversations use the same continuous Live architecture. The main session's input is suspended during a side encounter and resumes afterward without discarding its context.
 
 Motion respects `prefers-reduced-motion`: moving traffic and camera effects stop, NPCs remain still, and travel becomes a brief 1.2-second arrival. Desktop gameplay remains viewport-sized with a bounded recent transcript and no scrolling.
 

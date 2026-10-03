@@ -1,4 +1,4 @@
-import { Modality, Type, type LiveConnectConfig } from '@google/genai';
+import { ActivityHandling, Modality, Type, type LiveConnectConfig } from '@google/genai';
 import { ambientEvents, type SideEventId } from '../src/data/ambient';
 import { scenes, language } from '../src/data/scenes';
 import { taskIds, type TaskId } from '../src/types/game';
@@ -20,8 +20,8 @@ export function liveConfig(id: TaskId, sideEvent?:SideEventId): LiveConnectConfi
     responseModalities:[Modality.AUDIO], systemInstruction:sideEvent?buildSidePrompt(id,sideEvent):buildPrompt(id),
     speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:sideEvent?ambientEvents[sideEvent].voice:scenes[id].voice}}},
     inputAudioTranscription:{}, outputAudioTranscription:{},
-    // Click-to-start / click-to-send controls explicit boundaries; mid-sentence pauses do not end a turn.
-    realtimeInputConfig:{automaticActivityDetection:{disabled:true}},
+    // Capture stays open; the client VAD sends ordered boundaries and a pre-speech buffer.
+    realtimeInputConfig:{automaticActivityDetection:{disabled:true},activityHandling:ActivityHandling.START_OF_ACTIVITY_INTERRUPTS},
     tools:[{functionDeclarations:[{name:'complete_task',description:'Mark the current task complete only after the learner fulfills its conversational objective.',parameters:{type:Type.OBJECT,properties:{taskId:{type:Type.STRING,enum:[id]},success:{type:Type.BOOLEAN},shortFeedback:{type:Type.STRING}},required:['taskId','success']}}]}]
   };
 }

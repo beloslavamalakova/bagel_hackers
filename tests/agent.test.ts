@@ -11,11 +11,13 @@ test('four agent encounters form one complete journey',()=>{
  assert.equal(nextScene('bakery_smalltalk'),'completed');
  for(const id of taskIds){assert.equal(scenes[id].id,id);assert.ok(scenes[id].hintWords.length>0);assert.ok(scenes[id].fullHint);assert.ok(buildPrompt(id).includes(scenes[id].npcName));}
 });
-test('Live config uses requested native audio model and explicit speech boundaries',()=>{
+test('Live config uses requested native audio model and hands-free client turn detection and interruption',()=>{
  assert.equal(MODEL,'gemini-3.8-live');
  const c=liveConfig('street_recommendation');
  assert.deepEqual(c.responseModalities,['AUDIO']);
  assert.equal(c.realtimeInputConfig?.automaticActivityDetection?.disabled,true);
+ assert.equal(c.realtimeInputConfig?.activityHandling,'START_OF_ACTIVITY_INTERRUPTS');
+
  assert.ok(c.inputAudioTranscription);assert.ok(c.outputAudioTranscription);
  assert.equal(c.thinkingConfig,undefined);
 });
