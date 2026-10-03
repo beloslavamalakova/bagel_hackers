@@ -1,0 +1,7 @@
+import { missionLabels } from '../data/scenes';
+import { taskIds, type GameState } from '../types/game';
+import { Icon } from './Icon';
+export function MissionPanel({state}:{state:GameState}){
+ const index=taskIds.indexOf(state.scene as typeof taskIds[number]);
+ return <aside className="mission-panel"><div className="eyebrow">A PARISIAN ADVENTURE</div><h2>Your mission</h2><div className="mission-croissant"><Icon name="croissant" size={46}/></div><h3>Find the best<br/>croissant in Paris.</h3><p>Four conversations.<br/>One delicious destination.</p><div className="progress-label"><span>Your journey</span><span>{state.completedTasks.length} / 4</span></div><div className="progress-track"><div style={{width:`${state.completedTasks.length*25}%`}}/></div><ol className="mission-steps">{taskIds.map((id,i)=>{const done=state.completedTasks.includes(id),active=index===i&&!done;return <li key={id} className={`${done?'done':''} ${active?'current':''}`}><span className="step-marker">{done?<Icon name="check" size={13}/>:String(i+1).padStart(2,'0')}</span><div>{missionLabels[i]}{active&&<small>YOU ARE HERE</small>}</div></li>})}</ol><div className="pocket-card"><Icon name="battery" size={23}/><div><strong>0% battery. 100% possibility.</strong><span>Your French will get you there.</span></div></div><div className="mission-bottom"><span>LE MARAIS</span><span>48°51′ N 2°21′ E</span></div></aside>
+}
