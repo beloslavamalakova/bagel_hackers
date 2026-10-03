@@ -110,6 +110,51 @@ const content: Record<TaskId, HandbookContent> = {
     ],
     tip: 'You don’t need a perfect sentence to join in. Share one thing you like, then ask “Et toi ?”',
   },
+  club_refused: {
+    vocabulary: [
+      { french: 'pourquoi', english: 'why' },
+      { french: 'entrer', english: 'to go in' },
+      { french: 'les baskets', english: 'sneakers' },
+      { french: 'la tenue', english: 'the outfit' },
+      { french: 'le videur', english: 'the bouncer' },
+    ],
+    phrases: [
+      { french: 'Pourquoi je ne peux pas entrer ?', english: 'Why can’t I go in?' },
+      { french: 'Quel est le problème ?', english: 'What’s the problem?' },
+      { french: 'C’est à cause de mes chaussures ?', english: 'Is it because of my shoes?' },
+    ],
+    tip: 'At night it’s “Bonsoir”, not “Bonjour”. Stay polite: bouncers have heard every excuse already.',
+  },
+  club_boutique: {
+    vocabulary: [
+      { french: 'des chaussures', english: 'shoes' },
+      { french: 'une chemise', english: 'a shirt' },
+      { french: 'la pointure', english: 'shoe size' },
+      { french: 'je cherche', english: 'I’m looking for' },
+      { french: 'c’est combien ?', english: 'how much is it?' },
+    ],
+    phrases: [
+      { french: 'Je voudrais des chaussures et une chemise, s’il vous plaît.', english: 'I’d like some shoes and a shirt, please.' },
+      { french: 'Le videur ne me laisse pas entrer.', english: 'The bouncer won’t let me in.' },
+      { french: 'Je fais du quarante-deux.', english: 'I’m a size 42.' },
+    ],
+    tip: 'French shoe sizes are European: roughly a US men’s 9 is a 42, and a US women’s 8 is a 39.',
+  },
+  club_return: {
+    vocabulary: [
+      { french: 'maintenant', english: 'now' },
+      { french: 'encore', english: 'again' },
+      { french: 'seul / seule', english: 'alone' },
+      { french: 'mes amis', english: 'my friends' },
+      { french: 'à l’intérieur', english: 'inside' },
+    ],
+    phrases: [
+      { french: 'Est-ce que je peux entrer maintenant ?', english: 'Can I come in now?' },
+      { french: 'J’ai changé de chaussures !', english: 'I changed my shoes!' },
+      { french: 'Mes amis sont à l’intérieur.', english: 'My friends are inside.' },
+    ],
+    tip: 'Listen for “Vous êtes combien ?”: he wants to know how many people are with you.',
+  },
 };
 
 export function Handbook({ scene }: { scene: SceneConfig }) {

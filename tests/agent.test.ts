@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { buildPrompt, completionDecision, isTaskId, liveConfig, MODEL } from '../server/agent';
 import { nextScene, scenes } from '../src/data/scenes';
-import { partyTaskIds, taskIds } from '../src/types/game';
+import { clubTaskIds, partyTaskIds, taskIds } from '../src/types/game';
 import { encodePcm } from '../src/lib/audio';
 test('three agent encounters form one complete journey',()=>{
  assert.deepEqual(taskIds,['street_recommendation','street_directions','bakery_order']);
@@ -56,6 +56,20 @@ test('bakery order requires a separate follow-up speech turn',()=>{
  assert.equal(completionDecision('bakery_order',{taskId:'bakery_order',success:true},false,1).accepted,false);
  assert.equal(completionDecision('bakery_order',{taskId:'bakery_order',success:true},false,2).accepted,true);
  assert.match(buildPrompt('bakery_order'),/WAIT for a NEW learner spoken turn/);
+});
+test('nightclub story is separate, three encounters, and guards its two-stage scenes',()=>{
+ assert.deepEqual(clubTaskIds,['club_refused','club_boutique','club_return']);
+ assert.equal(nextScene('club_refused','club'),'club_boutique');
+ assert.equal(nextScene('club_boutique','club'),'club_return');
+ assert.equal(nextScene('club_return','club'),'completed');
+ for(const id of ['club_boutique','club_return'] as const){
+  assert.equal(completionDecision(id,{taskId:id,success:true},false,1).accepted,false);
+  assert.equal(completionDecision(id,{taskId:id,success:true},false,2).accepted,true);
+ }
+ assert.match(buildPrompt('club_refused'),/Le Velours/);
+ assert.doesNotMatch(buildPrompt('club_refused'),/Maison Lumière/);
+ assert.match(buildPrompt('club_boutique'),/Quelle est votre pointure/);
+ assert.match(buildPrompt('club_return'),/Vous êtes combien/);
 });
 test('microphone PCM preserves every native sample, clamps and uses little-endian',()=>{
  const bytes=Buffer.from(encodePcm(new Float32Array([1,-1,.5,2])),'base64');

@@ -7,6 +7,7 @@ const scenarios = [
   { id: 'bakery', storyId: undefined, icon: '🥖', title: 'Boulangerie', description: 'Buy a baguette and pay.', available: false },
   { id: 'paris', storyId: 'paris', icon: '🥐', title: 'Lost in Paris', description: 'Find the best croissant using only your French.', available: true },
   { id: 'party', storyId: 'first_party', icon: '🎉', title: 'Go to my first party', description: 'Meet new people and join the conversation in French.', available: true },
+  { id: 'club', storyId: 'club', icon: '🪩', title: 'Nightclub', description: 'Get past a bouncer who hates your outfit.', available: true },
   { id: 'station', storyId: undefined, icon: '🚆', title: 'Train station', description: 'Buy a ticket and find your platform.', available: false },
   { id: 'doctor', storyId: undefined, icon: '🩺', title: 'Doctor', description: 'Make an appointment in French.', available: false },
 ] as const;
@@ -58,6 +59,7 @@ export function ScenarioPicker({ onEnter }: { onEnter: (storyId: StoryId) => voi
               <span className="scenario-description">{scenario.description}</span>
               {!scenario.available && <span className="scenario-tag">Coming soon</span>}
               {scenario.id === 'paris' && <span className="scenario-tag">Voice adventure</span>}
+              {scenario.id === 'club' && <span className="scenario-tag">Voice adventure</span>}
               {scenario.id === 'party' && <span className="scenario-tag">Beginner · A1</span>}
             </button>
           ))}

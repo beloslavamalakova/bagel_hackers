@@ -1,6 +1,16 @@
 import type { TaskId } from '../../types/game';
 import { AmbientActor, AmbientCafeGuest, AmbientCyclist, AmbientDogWalker, AmbientPedestrian } from './AmbientActor';
 export function WorldLayer({scene}:{scene:TaskId}) {
+ if(scene==='club_refused'||scene==='club_return')return <div className="world-layer outdoors night" aria-hidden="true">
+  <div className="club-door-glow"/>
+  <AmbientPedestrian speed={33} delay={-9} position={74} scale={.42} tone="#3d3a52"/>
+  <AmbientPedestrian direction="left" speed={41} delay={-24} position={80} scale={.55} tone="#5a3346"/>
+  <AmbientActor kind="scooter" speed={19} delay={-14} position={86} scale={.6} tone="#2f3a44"/>
+  <div className="neon-flicker"/>
+ </div>;
+ if(scene==='club_boutique')return <div className="world-layer indoors shop" aria-hidden="true">
+  <div className="string-light light-one"/><div className="string-light light-two"/><div className="string-light light-three"/>
+ </div>;
  const street=scene.startsWith('street');
  return <div className={`world-layer ${street?'outdoors':'indoors'}`} aria-hidden="true">
   {street?<>

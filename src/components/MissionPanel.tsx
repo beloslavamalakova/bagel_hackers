@@ -7,6 +7,13 @@ const partyNextLabels=['Say hello to the host','Meet someone new','Join the conv
 export function MissionPanel({state,traveling=false,memories=[]}:{state:GameState;traveling?:boolean;memories?:string[]}) {
  const taskIds=getTaskIds(state.storyId);
  const index=taskIds.indexOf(state.scene as typeof taskIds[number]);
+ if(state.storyId==='club'){
+  const clubDone=['Karim explained the dress code','Margaux found you shoes and a shirt','Karim let you in'],clubNext=['Face the bouncer','Find something to wear','Try the door again'];
+  return <aside className="mission-panel"><div className="eyebrow">A PARISIAN NIGHT OUT</div><h2>Your night out</h2><div className="mission-croissant"><Icon name="music" size={46}/></div><h3>Get past the<br/>velvet rope.</h3><p>Three conversations.<br/>One very strict dress code.</p><div className="progress-label"><span>Your journey</span><span>{state.completedTasks.length} / {taskIds.length}</span></div><div className="progress-track"><div style={{width:`${state.completedTasks.length/taskIds.length*100}%`}}/></div><ol className="mission-steps story-timeline"><li className="done story-prologue"><span className="step-marker"><Icon name="check" size={13}/></span><div>You showed up in sneakers.<small>THE NIGHT BEGAN</small></div></li>{taskIds.map((id,i)=>{
+   const done=state.completedTasks.includes(id),active=index===i&&!done;
+   return <li key={id} className={`${done?'done':''} ${active?'current':''}`}><span className="step-marker">{done?<Icon name="check" size={13}/>:String(i+1).padStart(2,'0')}</span><div>{done?clubDone[i]:clubNext[i]}{active&&<small>YOU ARE HERE</small>}</div></li>;
+  })}</ol>{traveling&&<div className="story-travel"><span className="presence-dot talking"/>Following the next chapter…</div>}{memories.length>0&&<div className="story-memories"><span>THE LITTLE THINGS · {memories.length} ✦</span>{memories.map(memory=><p key={memory}><span>✦</span>{memory}</p>)}</div>}<div className="pocket-card"><Icon name="spark" size={23}/><div><strong>Sneakers 1. You 0.</strong><span>Your French can even the score.</span></div></div><div className="mission-bottom"><span>OBERKAMPF</span><span>48°51′ N 2°22′ E</span></div></aside>;
+ }
  const party=state.storyId==='first_party';
  const doneLabels=party?partyStoryLabels:parisStoryLabels;
  const nextLabels=party?partyNextLabels:parisNextLabels;

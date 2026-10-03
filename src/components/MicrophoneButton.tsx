@@ -4,15 +4,16 @@ interface Props {
   status: VoiceStatus;
   muted: boolean;
   name: string;
+  salutation?: string;
   level: number;
   connect: () => void;
   toggleMute: () => void;
 }
-export function MicrophoneButton({status,name,level,connect,toggleMute,muted}:Props) {
+export function MicrophoneButton({status,name,salutation='bonjour',level,connect,toggleMute,muted}:Props) {
   const offline = status === 'offline' || status === 'error';
   const busy = status==='connecting';
   const labels: Record<VoiceStatus,string> = {
-    offline: `Say bonjour to ${name}`, error: 'Try connecting again',
+    offline: `Say ${salutation} to ${name}`, error: 'Try connecting again',
     connecting: 'Preparing your microphone…', ready: muted?'Microphone muted':'Listening — speak naturally',
     listening: 'Listening…', thinking: 'Thinking…',
     speaking: `${name} is speaking…`
