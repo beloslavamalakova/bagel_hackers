@@ -195,3 +195,17 @@
 
 .moment-bystander{position:absolute;left:70%;bottom:5%;width:110px;height:160px;animation:bystander-react 1.5s .9s ease both}
 @keyframes bystander-react{0%,100%{translate:0 0;rotate:0deg}35%,65%{translate:4px -4px;rotate:-3deg}}
+/* Nightclub journey: neon, bass pulse and string lights. */
+.environment.club-entrance,.environment.friperie{background:#1c1726}
+.club-door-glow{position:absolute;left:41%;right:41%;top:44%;bottom:23%;border-radius:50%;background:radial-gradient(#d36bff66,transparent 70%);filter:blur(14px);animation:bass-pulse .9s ease-in-out infinite alternate}
+.neon-flicker{position:absolute;left:34%;right:34%;top:29%;height:10%;border-radius:14px;box-shadow:0 0 40px 10px #ff5fa233;animation:neon-flicker 7s steps(1) infinite}
+.world-layer.night .ambient-actor{filter:brightness(.55) saturate(.8)}
+.string-light{position:absolute;top:6%;width:22px;height:22px;border-radius:50%;background:radial-gradient(#ffe2a088,transparent 70%);animation:twinkle 3.4s ease-in-out infinite}
+.light-one{left:16%}.light-two{left:39%;animation-delay:-1.2s}.light-three{left:72%;animation-delay:-2.3s}
+.travel-night{background:#1d1a2a}
+.travel-night .travel-midground,.travel-night .travel-pavement{filter:brightness(.42) saturate(.75) hue-rotate(200deg)}
+.travel-night .travel-topline{color:#f6dcff}
+@keyframes bass-pulse{from{opacity:.55;transform:scale(.96)}to{opacity:1;transform:scale(1.04)}}
+@keyframes neon-flicker{0%,100%{opacity:1}41%{opacity:.35}42%{opacity:1}77%{opacity:.5}78%{opacity:1}}
+@keyframes twinkle{0%,100%{opacity:.45}50%{opacity:1}}
+@media(prefers-reduced-motion:reduce){.club-door-glow,.neon-flicker,.string-light{animation:none}}

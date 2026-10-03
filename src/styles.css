@@ -241,3 +241,9 @@
 .header .header-right>.handbook-trigger>svg:last-child{width:14px;height:14px}
 @media(max-width:900px){.header .header-right{gap:14px}}
 @media(max-width:650px){.header .header-right{gap:9px}.header .header-right>.handbook-trigger{width:38px;height:38px;padding:8px;justify-content:center}.header .header-right>.handbook-trigger>span,.header .header-right>.handbook-trigger>svg:last-child{display:none}}
+.header-left{display:flex;align-items:center;gap:24px;min-width:0}
+.header-back{display:flex;align-items:center;gap:7px;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:#fbf9f4;color:#6d7065;font-size:12px;white-space:nowrap}
+.header-back:hover{background:#f0eadf;color:var(--ink);border-color:#c8b6a1}
+.header-back svg{transform:rotate(180deg)}
+@media(max-width:900px){.header-left{gap:14px}}
+@media(max-width:650px){.header-left{gap:10px}.header-back{width:36px;height:36px;padding:8px;justify-content:center}.header-back>svg{width:17px;height:17px}.header-back{font-size:0}}

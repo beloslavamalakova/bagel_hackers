@@ -118,6 +118,20 @@ The landing page also offers a beginner A1 party story. The learner arrives at a
 
 The party uses the same voice conversation, hint, handbook, and progress systems as Lost in Paris, with its own beginner-level prompts, party illustration, mission map, and ending.
 
+## Nightclub
+
+Pick **Nightclub** on the scenario screen. It's 11:48 PM on Rue Oberkampf, and the bouncer at the fictional club Le Velours turns you away for wearing sneakers.
+
+| Scene | NPC | Objective | Completion |
+|---|---|---|---|
+| `club_refused` | Karim (bouncer) | Find out why you can't get in | Understandable French "why?" → dress code + friperie tip |
+| `club_boutique` | Margaux (friperie owner) | Shoes and a shirt | Ask for both, then answer "Quelle est votre pointure ?" |
+| `club_return` | Karim (bouncer) | Get in this time | Ask again, then answer "Vous êtes combien ?" |
+
+`intro → club_refused → club_boutique → club_return → completed`
+
+A scene's `minTurns` (in `src/data/scenes.ts`) sets the server's minimum speech-turn guard.
+
 Each scene has three hint states: no hint, scrambled word chips, and a useful sentence. Hints reset between encounters. Progress and game state are intentionally in memory; replay resets the journey.
 
 ## Demo recovery

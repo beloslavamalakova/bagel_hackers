@@ -29,7 +29,7 @@ export function liveConfig(id: TaskId, sideEvent?:SideEventId): LiveConnectConfi
 export function completionDecision(current: TaskId, args: Record<string, unknown> | undefined, completed: boolean, learnerTurns: number, sideEvent?:SideEventId) {
   if (completed) return {accepted:false,reason:'Task already completed.'};
   if (args?.taskId !== current || args?.success !== true) return {accepted:false,reason:'Invalid task or unsuccessful objective.'};
-  const minimum = sideEvent ? 1 : current === 'bakery_order' ? 2 : 1;
+  const minimum = sideEvent ? 1 : current === 'bakery_order' ? 2 : scenes[current].minTurns ?? 1;
   if (learnerTurns < minimum) return {accepted:false,reason:`Wait for at least ${minimum} learner speech turns and satisfy the objective.`};
   return {accepted:true,reason:'Task complete.'};
 }
