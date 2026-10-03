@@ -1,19 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import type { AmbientEvent } from '../../data/ambient';
-import type { HintLevel, SceneConfig, VoiceStatus } from '../../types/game';
+import type { HintLevel, SceneConfig } from '../../types/game';
 import { useGeminiLive } from '../../hooks/useGeminiLive';
 import { ConversationPanel } from '../ConversationPanel';
 import { Icon } from '../Icon';
 export function SideConversation({event,scene,onExit}:{event:AmbientEvent;scene:SceneConfig;onExit:(success:boolean)=>void}) {
  const [done,setDone]=useState(false),[hint,setHint]=useState<HintLevel>(0),[turns,setTurns]=useState(0);
- const doneRef=useRef(false),previous=useRef<VoiceStatus>('offline');
+ const doneRef=useRef(false);
  const exitRef=useRef(onExit);exitRef.current=onExit;
  const voice=useGeminiLive(scene.id,()=>{doneRef.current=true;setDone(true);},event.id);
  useEffect(()=>{void voice.connect();},[voice.connect]);
  useEffect(()=>{
-  if(previous.current==='listening'&&voice.status==='thinking')setTurns(n=>n+1);
-  previous.current=voice.status;
- },[voice.status]);
+  setTurns(voice.learnerTurns);
+ },[voice.status,voice.learnerTurns]);
  useEffect(()=>{
   if(done){const timer=setTimeout(()=>exitRef.current(true),1700);return()=>clearTimeout(timer);}
   if(turns>=2&&voice.status==='ready'){

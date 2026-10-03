@@ -87,3 +87,15 @@ test('MicrophoneCapture.stop waits for the actual worklet flush, including delay
   assert.equal(result.durationMs,333/48000*1000);
   capture.close();
 });
+test('continuous capture keeps streaming without retaining an unbounded recording',async()=>{
+ const port={onmessage:null as ((event:{data:any})=>void)|null,postMessage:()=>{}};
+ const disconnect={disconnect:()=>{}};
+ let delivered=0;
+ const capture=new (MicrophoneCapture as any)({sampleRate:48000,resume:async()=>{},close:async()=>{}},{getTracks:()=>[]},disconnect,{...disconnect,port},disconnect,()=>delivered++);
+ await capture.start(false);
+ for(let i=0;i<1000;i++)port.onmessage!({data:{type:'audio',samples:new Float32Array(2048)}});
+ assert.equal(delivered,1000);
+ assert.equal((capture as any).chunks.length,0);
+ assert.ok(capture.stats.durationMs>40000);
+ capture.close();
+});

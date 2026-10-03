@@ -19,7 +19,7 @@ test('ambient choreography is deterministic, weighted, and limited to two unique
  }
  assert.equal(seen.size,5,'All five optional moments should occur across different runs.');
 });
-test('main Live setup retains its voice, tool, manual boundaries and bakery safeguards',()=>{
+test('main Live setup retains its voice, tool, hands-free client boundaries and bakery safeguards',()=>{
  for(const id of taskIds){
   const config=liveConfig(id);
   assert.equal(config.realtimeInputConfig?.automaticActivityDetection?.disabled,true);

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
+import { primeConversationAudio } from './lib/audioContext';
 import { ScenarioPicker } from './components/ScenarioPicker';
 import { Header } from './components/Header';
 import { IntroScene } from './components/IntroScene';
@@ -32,11 +33,12 @@ export default function App(){
  const reset=()=>{voiceEnabled.current=false;game.reset();setMemories([]);setSeed(newRunSeed());};
  const reward=useCallback((id:SideEventId)=>setMemories(old=>old.includes(id)?old:[...old,id]),[]);
  if(showScenarioPicker)return <div className="app"><ScenarioPicker onEnter={(storyId:StoryId)=>{reset();game.selectStory(storyId);setShowScenarioPicker(false);}}/></div>;
- return <div className={`app ${scene?'in-game':''}`}><Header home={!scene} handbookScene={scene??undefined} onHome={()=>{reset();setShowScenarioPicker(true);}}/>{game.state.scene==='intro'?<IntroScene onStart={game.start} storyId={game.state.storyId}/>:game.state.scene==='completed'?<CompletionScene onReset={reset} memories={memories.map(id=>ambientEvents[id].reward)} storyId={game.state.storyId}/>:scene&&<Game key={`${scene.id}-${restart}`} scene={scene} game={game} voiceEnabled={voiceEnabled} plan={plan} memories={memories.map(id=>ambientEvents[id].reward)} onReward={reward}/>}{dev&&<div className="dev-controls"><span>DEV</span>{scene?<><button onClick={()=>game.complete(scene.id,'Completed with development controls.')}>Mark complete / skip</button><button onClick={()=>{game.restartScene();setRestart(r=>r+1);}}>Restart scene</button></>:<button onClick={game.start}>Start journey</button>}<button onClick={reset}>Reset</button></div>}</div>;
+ return <div className={`app ${scene?'in-game':''}`}><Header home={!scene} handbookScene={scene??undefined} onHome={()=>{reset();setShowScenarioPicker(true);}}/>{game.state.scene==='intro'?<IntroScene onStart={()=>{primeConversationAudio();voiceEnabled.current=true;game.start();}} storyId={game.state.storyId}/>:game.state.scene==='completed'?<CompletionScene onReset={reset} memories={memories.map(id=>ambientEvents[id].reward)} storyId={game.state.storyId}/>:scene&&<Game key={`${scene.id}-${restart}`} scene={scene} game={game} voiceEnabled={voiceEnabled} plan={plan} memories={memories.map(id=>ambientEvents[id].reward)} onReward={reward}/>}{dev&&<div className="dev-controls"><span>DEV</span>{scene?<><button onClick={()=>game.complete(scene.id,'Completed with development controls.')}>Mark complete / skip</button><button onClick={()=>{game.restartScene();setRestart(r=>r+1);}}>Restart scene</button></>:<button onClick={game.start}>Start journey</button>}<button onClick={reset}>Reset</button></div>}</div>;
 }
 function Game({scene,game,voiceEnabled,plan,memories,onReward}:{scene:typeof scenes[TaskId];game:ReturnType<typeof useGameState>;voiceEnabled:MutableRefObject<boolean>;plan:PlannedEvent[];memories:string[];onReward:(id:SideEventId)=>void}){
  const voice=useGeminiLive(scene.id,game.complete);
  const [side,setSide]=useState<SideEventId|null>(null);
+ useEffect(()=>{voice.suspend(Boolean(side));return()=>voice.suspend(false);},[side,voice.suspend]);
  const world=useAmbientWorld(scene.id,plan,Boolean(game.transition),Boolean(side));
  useEffect(()=>{if(voiceEnabled.current)void voice.connect();},[scene.id,voice.connect,voiceEnabled]);
  const storyTaskIds=getTaskIds(game.state.storyId);

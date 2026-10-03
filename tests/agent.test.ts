@@ -33,11 +33,13 @@ test('all encounters support beginner clarification requests in simple English',
   assert.match(prompt,/do not treat it as completing the objective/);
  }
 });
-test('Live config uses requested native audio model and explicit speech boundaries',()=>{
+test('Live config uses native audio with client VAD turn detection and interruption',()=>{
  assert.equal(MODEL,'gemini-3.8-live');
  const c=liveConfig('street_recommendation');
  assert.deepEqual(c.responseModalities,['AUDIO']);
  assert.equal(c.realtimeInputConfig?.automaticActivityDetection?.disabled,true);
+ assert.equal(c.realtimeInputConfig?.activityHandling,'START_OF_ACTIVITY_INTERRUPTS');
+
  assert.ok(c.inputAudioTranscription);assert.ok(c.outputAudioTranscription);
  assert.equal(c.thinkingConfig,undefined);
 });

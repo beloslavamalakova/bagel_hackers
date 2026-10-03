@@ -21,7 +21,7 @@ export function pcmMimeType(sampleRate: number): string {
 export class AudioPlayer {
   private nextTime=0;
   private sources=new Set<AudioBufferSourceNode>();
-  constructor(readonly context: AudioContext) {}
+  constructor(readonly context: AudioContext,private readonly ownsContext=true) {}
   get pendingMs() { return Math.max(0,(this.nextTime-this.context.currentTime)*1000); }
   async unlock() { await this.context.resume(); }
   play(data: string, mimeType: string) {
@@ -42,5 +42,5 @@ export class AudioPlayer {
     source.onended=()=>{this.sources.delete(source);source.disconnect();};
   }
   stop() { for(const source of this.sources) {source.onended=null;try{source.stop();}catch{}source.disconnect();} this.sources.clear();this.nextTime=0; }
-  close() {this.stop();if(this.context.state!=='closed')void this.context.close().catch(()=>{});}
+  close() {this.stop();if(this.ownsContext&&this.context.state!=='closed')void this.context.close().catch(()=>{});}
 }
