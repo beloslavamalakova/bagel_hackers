@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { Icon } from './Icon';
+import type { StoryId } from '../types/game';
 
 const scenarios = [
-  { id: 'cafe', icon: '☕', title: 'Café', description: 'Order a coffee and a croissant.', available: false },
-  { id: 'bakery', icon: '🥖', title: 'Boulangerie', description: 'Buy a baguette and pay.', available: false },
-  { id: 'paris', icon: '🥐', title: 'Lost in Paris', description: 'Find the best croissant using only your French.', available: true },
-  { id: 'station', icon: '🚆', title: 'Train station', description: 'Buy a ticket and find your platform.', available: false },
-  { id: 'doctor', icon: '🩺', title: 'Doctor', description: 'Make an appointment in French.', available: false },
+  { id: 'cafe', storyId: undefined, icon: '☕', title: 'Café', description: 'Order a coffee and a croissant.', available: false },
+  { id: 'bakery', storyId: undefined, icon: '🥖', title: 'Boulangerie', description: 'Buy a baguette and pay.', available: false },
+  { id: 'paris', storyId: 'paris', icon: '🥐', title: 'Lost in Paris', description: 'Find the best croissant using only your French.', available: true },
+  { id: 'party', storyId: 'first_party', icon: '🎉', title: 'Go to my first party', description: 'Meet new people and join the conversation in French.', available: true },
+  { id: 'station', storyId: undefined, icon: '🚆', title: 'Train station', description: 'Buy a ticket and find your platform.', available: false },
+  { id: 'doctor', storyId: undefined, icon: '🩺', title: 'Doctor', description: 'Make an appointment in French.', available: false },
 ] as const;
 
 const helpLevels = [
@@ -15,8 +17,8 @@ const helpLevels = [
   { id: 'challenge', title: 'Challenge me', description: 'Fewer hints, odd questions' },
 ] as const;
 
-export function ScenarioPicker({ onEnter }: { onEnter: () => void }) {
-  const [selectedScenario, setSelectedScenario] = useState('paris');
+export function ScenarioPicker({ onEnter }: { onEnter: (storyId: StoryId) => void }) {
+  const [selectedScenario, setSelectedScenario] = useState<StoryId>('paris');
   const [selectedHelp, setSelectedHelp] = useState('intermediate');
   const [customSituation, setCustomSituation] = useState('');
   const [customMessage, setCustomMessage] = useState('');
@@ -33,7 +35,7 @@ export function ScenarioPicker({ onEnter }: { onEnter: () => void }) {
 
       <section className="scenario-content" aria-labelledby="scenario-title">
         <h1 id="scenario-title">Rehearse the conversation you&apos;re afraid of.</h1>
-        <p className="scenario-lead">Apps teach words. Real people talk fast, sigh and don&apos;t wait. Practice French with someone who feels real.</p>
+        <p className="scenario-lead">Apps teach words. Real people talk fast, laugh, and don&apos;t wait. Practice French in the moments that make a city feel real.</p>
 
         <h2 className="scenario-question">1. Where are you going?</h2>
         <p className="scenario-note">You won&apos;t know who&apos;s working until you walk in.</p>
@@ -44,14 +46,19 @@ export function ScenarioPicker({ onEnter }: { onEnter: () => void }) {
               type="button"
               key={scenario.id}
               disabled={!scenario.available}
-              aria-pressed={selectedScenario === scenario.id}
-              onClick={() => setSelectedScenario(scenario.id)}
+              aria-pressed={selectedScenario === scenario.storyId}
+              onClick={() => {
+                if (!scenario.storyId) return;
+                setSelectedScenario(scenario.storyId);
+                if (scenario.storyId === 'first_party') setSelectedHelp('beginner');
+              }}
             >
               <span className="scenario-icon" aria-hidden="true">{scenario.icon}</span>
               <strong>{scenario.title}</strong>
               <span className="scenario-description">{scenario.description}</span>
               {!scenario.available && <span className="scenario-tag">Coming soon</span>}
               {scenario.id === 'paris' && <span className="scenario-tag">Voice adventure</span>}
+              {scenario.id === 'party' && <span className="scenario-tag">Beginner · A1</span>}
             </button>
           ))}
         </div>
@@ -71,8 +78,8 @@ export function ScenarioPicker({ onEnter }: { onEnter: () => void }) {
           ))}
         </div>
 
-        <button className="primary-button scenario-enter" type="button" onClick={onEnter} disabled={selectedScenario !== 'paris'}>
-          Walk in <span aria-hidden="true">→</span>
+        <button className="primary-button scenario-enter" type="button" onClick={() => onEnter(selectedScenario)}>
+          {selectedScenario === 'first_party' ? 'Go to the party' : 'Walk in'} <span aria-hidden="true">→</span>
         </button>
 
         <form className="scenario-custom" onSubmit={event => {

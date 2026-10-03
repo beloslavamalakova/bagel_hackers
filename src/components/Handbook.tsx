@@ -5,6 +5,21 @@ import type { SceneConfig } from '../types/game';
 
 type LanguageLine = { french: string; english: string };
 type HandbookContent = { vocabulary: LanguageLine[]; phrases: LanguageLine[]; tip: string };
+const understandingPhrases: LanguageLine[] = [
+  {
+    french: 'En anglais, s’il vous plaît ?',
+    english: 'In English, please?',
+  },
+  {
+    french: 'Ça veut dire quoi ?',
+    english: 'What does that mean?',
+  },
+];
+const understandingWords: LanguageLine[] = [
+  { french: 'anglais', english: 'English' },
+  { french: 'ça veut dire', english: 'that means' },
+  { french: 's’il vous plaît', english: 'please' },
+];
 
 const content: Record<TaskId, HandbookContent> = {
   street_recommendation: {
@@ -52,20 +67,48 @@ const content: Record<TaskId, HandbookContent> = {
     ],
     tip: 'After ordering, listen for “Sur place ou à emporter ?” and choose where you want to enjoy your order.',
   },
-  bakery_smalltalk: {
+  party_arrival: {
     vocabulary: [
-      { french: 'les vacances', english: 'the holidays' },
-      { french: 'j’aime', english: 'I like' },
-      { french: 'je viens de', english: 'I come from' },
-      { french: 'le temps', english: 'the weather' },
-      { french: 'et vous ?', english: 'and you? (polite)' },
+      { french: 'bonsoir', english: 'good evening' },
+      { french: 'bienvenue', english: 'welcome' },
+      { french: 'je m’appelle', english: 'my name is' },
+      { french: 'enchanté(e)', english: 'nice to meet you' },
     ],
     phrases: [
-      { french: 'Je suis en vacances à Paris.', english: 'I’m on holiday in Paris.' },
-      { french: 'J’aime beaucoup cette ville.', english: 'I really like this city.' },
-      { french: 'Et vous, vous habitez à Paris ?', english: 'And you, do you live in Paris?' },
+      { french: 'Bonsoir ! Je m’appelle…', english: 'Good evening! My name is…' },
+      { french: 'Merci pour l’invitation.', english: 'Thank you for the invitation.' },
+      { french: 'Enchanté(e) !', english: 'Nice to meet you!' },
     ],
-    tip: 'A short answer plus a question back is a great way to keep a conversation going.',
+    tip: 'A smile and “Bonsoir !” are a perfect way to arrive. You only need to say your name to start.',
+  },
+  party_meet_someone: {
+    vocabulary: [
+      { french: 'comment', english: 'what / how' },
+      { french: 'vous appelez-vous ?', english: 'are you called?' },
+      { french: 'je viens de', english: 'I come from' },
+      { french: 'et vous ?', english: 'and you?' },
+    ],
+    phrases: [
+      { french: 'Comment vous appelez-vous ?', english: 'What is your name?' },
+      { french: 'Vous venez d’où ?', english: 'Where are you from?' },
+      { french: 'Je viens de…', english: 'I come from…' },
+    ],
+    tip: 'At a party you can use “tu” with people your age, but “vous” is always a polite choice when you first meet.',
+  },
+  party_join_chat: {
+    vocabulary: [
+      { french: 'j’aime', english: 'I like' },
+      { french: 'la musique', english: 'the music' },
+      { french: 'danser', english: 'to dance' },
+      { french: 'un jus', english: 'a juice' },
+      { french: 'c’est délicieux', english: 'it’s delicious' },
+    ],
+    phrases: [
+      { french: 'J’aime bien cette musique.', english: 'I like this music.' },
+      { french: 'C’est délicieux !', english: 'It’s delicious!' },
+      { french: 'Et toi, tu aimes danser ?', english: 'And you, do you like dancing?' },
+    ],
+    tip: 'You don’t need a perfect sentence to join in. Share one thing you like, then ask “Et toi ?”',
   },
 };
 
@@ -172,6 +215,24 @@ export function Handbook({ scene }: { scene: SceneConfig }) {
                       <div><p lang="fr">{item.french}</p><span>{item.english}</span></div>
                       {listenButton(item.french, item.french)}
                     </article>
+                  ))}
+                </div>
+              </section>
+              <section className="handbook-understanding" aria-labelledby="handbook-understanding-title">
+                <div className="handbook-section-title"><span>HELP</span><h3 id="handbook-understanding-title">Didn’t understand?</h3></div>
+                <p className="handbook-understanding-note">Keep it simple. Try one of these:</p>
+                {understandingPhrases.map(item => (
+                  <article className="handbook-phrase" key={item.french}>
+                    <div><p lang="fr">{item.french}</p><span>{item.english}</span></div>
+                    {listenButton(item.french, item.french)}
+                  </article>
+                ))}
+                <div className="handbook-understanding-words" aria-label="Helpful words">
+                  {understandingWords.map(item => (
+                    <div className="handbook-understanding-word" key={item.french}>
+                      <span><strong lang="fr">{item.french}</strong><small>{item.english}</small></span>
+                      {listenButton(item.french, item.french)}
+                    </div>
                   ))}
                 </div>
               </section>

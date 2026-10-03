@@ -4,7 +4,7 @@
 
 Your phone is dead. Somewhere in Le Marais is the best croissant in Paris. With no maps, no translation app, and no battery, your only tool is your French.
 
-A small, voice-first hackathon game: four AI character encounters, one complete mission, original Paris illustrations, and no accounts, database, or movement engine. The interface is English; the conversations are French. Maison Lumière is fictional.
+A small, voice-first hackathon game: three AI character encounters, one complete mission, original Paris illustrations, and no accounts, database, or movement engine. The interface is English; the conversations are French. Maison Lumière is fictional.
 
 ## Setup
 
@@ -49,7 +49,7 @@ The preferred Vite dependencies were unavailable in the implementation environme
 src/
   App.tsx                    Six-state journey and screen composition
   components/                Environment, NPC, mission, voice, hints, transitions
-  data/scenes.ts             All four encounters + French configuration
+  data/scenes.ts             All three encounters + French configuration
   hooks/useGameState.ts      Idempotent mission state and transitions
   hooks/useGeminiLive.ts     Voice lifecycle, transcripts, playback, recovery
   lib/audio.ts               PCM encoding and sequential audio playback
@@ -72,9 +72,9 @@ The browser connects to `/live` on the same origin. The server chooses the NPC's
 
 Click-to-start / click-to-send uses `activityStart` / `activityEnd` with automatic activity detection disabled. An **AudioWorklet** captures microphone samples off the UI thread; samples are encoded as mono signed 16-bit little-endian PCM at the actual AudioContext sample rate, reported in the MIME type. Gemini performs its own resampling. A short prefix is buffered so very short clicks and nearly silent recordings are not sent as hallucination-prone turns. The server relays this directly to Gemini. Native 24 kHz PCM responses are decoded and scheduled consecutively with Web Audio, avoiding overlapping chunks. Capture ends only after the AudioWorklet acknowledges that its final chunk was flushed; NPC events cannot stop an active learner recording. Every part in each Live event is processed. There is no browser speech recognition or separate TTS layer.
 
-Each encounter supplies its name, role, objective, local knowledge, semantic success criteria, and beginner French behavior. Grammar and wording need not match the hints. The bakery explicitly requires an order **and a separate “sur place / à emporter” answer**. Léa is open-ended and should finish after three meaningful learner contributions.
+Each encounter supplies its name, role, objective, local knowledge, semantic success criteria, and beginner French behavior. Grammar and wording need not match the hints. The bakery explicitly requires an order **and a separate “sur place / à emporter” answer**.
 
-When Gemini calls `complete_task`, the server validates the scene ID, `success === true`, and duplicate state. A minimum speech-turn guard prevents completion from a greeting alone, a single bakery order, or fewer than three small-talk speech turns. **Gemini, not that turn counter, judges communicative success.** The server sends the function response back to Gemini. The browser waits for the final response and queued audio, displays feedback, then animates to the next scene. A bounded fallback handles a missing final event. Old sockets, audio queues, capture contexts, streams, and timers are disposed when a scene changes or a connection is retried.
+When Gemini calls `complete_task`, the server validates the scene ID, `success === true`, and duplicate state. A minimum speech-turn guard prevents completion from a greeting alone or a single bakery order. **Gemini, not that turn counter, judges communicative success.** The server sends the function response back to Gemini. The browser waits for the final response and queued audio, displays feedback, then animates to the next scene. A bounded fallback handles a missing final event. Old sockets, audio queues, capture contexts, streams, and timers are disposed when a scene changes or a connection is retried.
 
 The integration follows Google's [Live API capabilities guide](https://ai.google.dev/gemini-api/docs/live-api/capabilities) and [official JavaScript SDK](https://github.com/googleapis/js-genai). Thinking configuration is deliberately omitted for this model.
 
@@ -92,7 +92,7 @@ learner speech
   → a new contextual agent encounter begins
 ```
 
-Only the scene sequence is predetermined. You can ask Camille about a good bakery in your own words; Amélie can clarify a missing coffee; Léa can talk about a learner-selected topic. Hints scaffold speech and **never complete a task**.
+Only the three-scene sequence is predetermined. You can ask Camille about a good bakery in your own words, ask Julien for directions, and order naturally with Amélie. Hints scaffold speech and **never complete a task**.
 
 ## The journey
 
@@ -101,9 +101,22 @@ Only the scene sequence is predetermined. You can ask Camille about a good baker
 | `street_recommendation` | Camille | Find a good croissant/bakery | Understandable French recommendation request |
 | `street_directions` | Julien | Reach Maison Lumière | Understandable French directions request |
 | `bakery_order` | Amélie | One croissant and one coffee | Order both, then answer the follow-up |
-| `bakery_smalltalk` | Léa | A little conversation | Three meaningful French learner turns |
 
-`intro → street_recommendation → street_directions → bakery_order → bakery_smalltalk → completed`
+`intro → street_recommendation → street_directions → bakery_order → completed`
+
+## Go to my first party
+
+The landing page also offers a beginner A1 party story. The learner arrives at a friendly apartment party, introduces themself to the host, meets another guest, then joins a short conversation about music and snacks.
+
+| Scene | NPC | Objective |
+|---|---|---|
+| `party_arrival` | Emma | Greet the host and introduce yourself |
+| `party_meet_someone` | Lucas | Ask someone their name or where they are from |
+| `party_join_chat` | Inès | Share something you like and ask a simple question |
+
+`intro → party_arrival → party_meet_someone → party_join_chat → completed`
+
+The party uses the same voice conversation, hint, handbook, and progress systems as Lost in Paris, with its own beginner-level prompts, party illustration, mission map, and ending.
 
 Each scene has three hint states: no hint, scrambled word chips, and a useful sentence. Hints reset between encounters. Progress and game state are intentionally in memory; replay resets the journey.
 
@@ -129,7 +142,7 @@ The implementation environment prevents opening local listening sockets and star
 4. Try “Vous connaissez une bonne boulangerie ?” rather than the hint sentence. Confirm Maison Lumière is recommended and the scene automatically advances.
 5. Ask Julien how to reach Maison Lumière. Confirm short directions and arrival at the bakery.
 6. Order both items. Confirm Amélie asks **Sur place ou à emporter ?** and stays in the scene until your second answer.
-7. Converse freely with Léa for three meaningful French turns. Confirm the completion screen and replay.
+7. Confirm the three-conversation completion screen and replay.
 8. Disconnect the network mid-conversation; verify the error and retry after restoring it.
 9. Deny microphone access, check the message, allow it in site settings, and retry.
 10. Verify `?dev=true` recovery controls; verify they are absent with `npm start`.

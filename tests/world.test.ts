@@ -36,7 +36,7 @@ test('optional NPC setup reuses Live audio but has its own objective and one-tur
  assert.match(config.systemInstruction as string,/Thomas/);
  assert.match(config.systemInstruction as string,/rewards ONLY this side encounter/);
  assert.equal(config.realtimeInputConfig?.automaticActivityDetection?.disabled,true);
- assert.equal(completionDecision('bakery_smalltalk',{taskId:'bakery_smalltalk',success:true},false,1,'coffee_spill').accepted,true);
+ assert.equal(completionDecision('street_recommendation',{taskId:'street_recommendation',success:true},false,1,'coffee_spill').accepted,true);
  assert.equal(completionDecision('street_recommendation',{taskId:'street_directions',success:true},false,1,'coffee_spill').accepted,false);
  assert.equal(completionDecision('street_recommendation',{taskId:'street_recommendation',success:true},true,1,'coffee_spill').accepted,false);
  assert.equal(completionDecision('street_recommendation',{taskId:'street_recommendation',success:true},false,0,'coffee_spill').accepted,false);

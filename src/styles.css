@@ -219,6 +219,20 @@
 @keyframes handbook-fade{from{opacity:0}to{opacity:1}}
 @keyframes handbook-slide{from{transform:translateX(25px);opacity:.7}to{transform:translateX(0);opacity:1}}
 @media(max-width:520px){.handbook-dialog-header{padding:22px 18px 17px}.handbook-dialog-header h2{font-size:24px}.handbook-content{padding:18px 18px 25px}.handbook-vocabulary{grid-template-columns:1fr}.handbook-word{padding:8px 10px}}
+.handbook-understanding{margin:23px 0;padding:13px;border:1px solid #e2d4b7;border-left:3px solid #b58c50;border-radius:6px;background:#f2eadb}
+.handbook-understanding .handbook-section-title{margin-bottom:5px}
+.handbook-understanding .handbook-section-title>span{font-weight:600}
+.handbook-understanding-note{margin-bottom:10px;font-size:10px;line-height:1.55;color:#77705f}
+.handbook-understanding .handbook-phrase{background:#fbf8f0;border-color:#e4dac7}
+.handbook-understanding .handbook-phrase+.handbook-phrase{margin-top:7px}
+.handbook-understanding-words{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:9px}
+.handbook-understanding-word{min-width:0;display:flex;align-items:center;justify-content:space-between;gap:2px;padding:5px 6px;border:1px solid #e4dac7;border-radius:5px;background:#fbf8f0}
+.handbook-understanding-word>span{min-width:0;display:flex;flex-direction:column;gap:2px}
+.handbook-understanding-word strong{font-size:9px;font-weight:600;overflow-wrap:anywhere}
+.handbook-understanding-word small{font-size:8px;color:var(--muted)}
+.handbook-understanding-word .handbook-listen{padding:3px}
+.handbook-understanding-word .handbook-listen span{display:none}
+@media(max-width:520px){.handbook-understanding-words{grid-template-columns:1fr}}
 .header .header-right>.handbook-trigger{width:auto;flex:0 0 auto;margin:0;padding:9px 11px;gap:7px;border-radius:6px;white-space:nowrap;background:#fbf9f4}
 .header .header-right>.handbook-trigger:hover{background:#f3eee4}
 .header .header-right>.handbook-trigger>span{display:block;flex:initial}
