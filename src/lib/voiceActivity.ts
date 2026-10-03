@@ -3,8 +3,7 @@ interface VoiceCallbacks {
  audio:(samples:Float32Array,sampleRate:number)=>void;
  end:()=>void;
 }
-/** Hands-free turn boundaries with pre-roll, hysteresis and sample-clock timing.
- * Never uses React status or NPC events to decide whether microphone samples count.
+/** Voice turn boundaries with pre-roll, hysteresis and sample-clock timing.
  */
 export class VoiceActivity {
  private prefix:{samples:Float32Array;rate:number;ms:number}[]=[];
@@ -14,9 +13,20 @@ export class VoiceActivity {
  private durationMs=0;
  private noise=.001;
  active=false;
- constructor(private callbacks:VoiceCallbacks){}
+ constructor(private callbacks:VoiceCallbacks,private manualBoundaries=false){}
+ start(){
+  if(this.active)return;
+  this.active=true;this.prefix=[];this.prefixMs=0;this.candidateMs=0;this.quietMs=0;this.durationMs=0;
+  this.callbacks.start();
+ }
  push(samples:Float32Array,rate:number,playing=false) {
   const ms=samples.length/rate*1000;
+  if(this.manualBoundaries){
+   if(!this.active)return;
+   this.callbacks.audio(samples,rate);this.durationMs+=ms;
+   if(this.durationMs>=60000)this.finish();
+   return;
+  }
   let energy=0;for(const value of samples)energy+=value*value;
   const rms=Math.sqrt(energy/Math.max(1,samples.length));
   // Echo-cancelled audio uses a slightly higher threshold during NPC playback.

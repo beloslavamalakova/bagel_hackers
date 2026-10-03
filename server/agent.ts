@@ -21,7 +21,7 @@ export function liveConfig(id: TaskId, sideEvent?:SideEventId): LiveConnectConfi
     responseModalities:[Modality.AUDIO], systemInstruction:sideEvent?buildSidePrompt(id,sideEvent):buildPrompt(id),
     speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:sideEvent?ambientEvents[sideEvent].voice:scenes[id].voice}}},
     inputAudioTranscription:{}, outputAudioTranscription:{},
-    // Capture stays open; the client VAD sends ordered boundaries and a pre-speech buffer.
+    // The client sends activity boundaries only for learner-initiated speech turns.
     realtimeInputConfig:{automaticActivityDetection:{disabled:true},activityHandling:ActivityHandling.START_OF_ACTIVITY_INTERRUPTS},
     tools:[{functionDeclarations:[{name:'complete_task',description:'Mark the current task complete only after the learner fulfills its conversational objective.',parameters:{type:Type.OBJECT,properties:{taskId:{type:Type.STRING,enum:[id]},success:{type:Type.BOOLEAN},shortFeedback:{type:Type.STRING}},required:['taskId','success']}}]}]
   };

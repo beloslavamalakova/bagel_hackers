@@ -247,3 +247,7 @@
 .header-back svg{transform:rotate(180deg)}
 @media(max-width:900px){.header-left{gap:14px}}
 @media(max-width:650px){.header-left{gap:10px}.header-back{width:36px;height:36px;padding:8px;justify-content:center}.header-back>svg{width:17px;height:17px}.header-back{font-size:0}}
+.mic-button.turn-button{width:auto;min-width:156px;height:52px;padding:0 18px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:10px;touch-action:manipulation}
+.mic-button.turn-button span{font-size:13px;font-weight:600;white-space:nowrap}
+.in-game .mic-button.turn-button{width:auto;height:52px}
+.mic-button.turn-button:disabled{animation:none}

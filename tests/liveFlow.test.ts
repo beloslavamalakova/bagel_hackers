@@ -4,8 +4,7 @@ import { build } from 'esbuild';
 import { runInNewContext } from 'node:vm';
 
 // Exercise the real React hook and AudioWorklet transport with fake browser I/O.
-// This catches wiring/startup races that isolated PCM and configuration tests miss.
-test('ready-before-permission, hands-free repeat turns and barge-in work through the real hook',async()=>{
+test('speak and finish controls send explicit repeat turns through the real hook',async()=>{
  const bundle=await build({entryPoints:['src/hooks/useGeminiLive.ts'],bundle:true,write:false,format:'cjs',platform:'browser',plugins:[{name:'react-harness',setup(b){b.onResolve({filter:/^react$/},()=>({path:'react',namespace:'harness'}));b.onLoad({filter:/.*/,namespace:'harness'},()=>({contents:'export const useState=globalThis.react.useState,useRef=globalThis.react.useRef,useEffect=globalThis.react.useEffect,useCallback=globalThis.react.useCallback;',loader:'js'}));}}]});
  const states:any[]=[],effects:(()=>any)[]=[],commands:any[]=[],sources:any[]=[],contexts:any[]=[],sockets:any[]=[],worklets:any[]=[],timers=new Map<number,()=>void>();
  let timerId=0,allowMic:(s:any)=>void=()=>{};
@@ -38,33 +37,57 @@ test('ready-before-permission, hands-free repeat turns and barge-in work through
  const connecting=voice.connect();const socket=sockets[0];socket.onopen();socket.receive({type:'ready'});
  assert.equal(states[0],'connecting','Do not claim listening before microphone permission/capture.');
  allowMic({getTracks:()=>[{stop:()=>{}}]});await connecting;
- assert.equal(states[0],'ready');assert.equal(contexts.length,1,'Mic and playback must share the unlocked context.');
+ assert.equal(states[0],'ready');assert.equal(contexts.length,1,'Mic and playback must share the same unlocked context.');
  assert.equal(commands.filter(c=>c.type==='start').length,1);
  const frame=(amplitude:number)=>worklets[0].port.onmessage({data:{type:'audio',samples:new Float32Array(960).fill(amplitude)}});
- socket.receive({type:'audio',data:Buffer.alloc(48000).toString('base64'),mimeType:'audio/pcm;rate=24000'});
+
+ for(let i=0;i<8;i++)frame(.04);
+ assert.equal(socket.messages.filter((m:any)=>m.type==='activity_start').length,0,'Idle microphone audio must not start a turn.');
+ assert.equal(socket.messages.filter((m:any)=>m.type==='audio').length,0,'Idle microphone audio must not be sent.');
+
+ voice.startSpeaking();
  for(let i=0;i<6;i++)frame(.04);
- assert.equal(states[0],'listening');assert.ok(sources[0].stopped,'Barge-in must stop playback locally, without waiting for a server signal.');
+ assert.equal(states[0],'listening');
  assert.equal(socket.messages.filter((m:any)=>m.type==='activity_start').length,1);
  assert.ok(socket.messages.some((m:any)=>m.type==='audio'));
- const before=sources.length;socket.receive({type:'audio',data:Buffer.alloc(48000).toString('base64'),mimeType:'audio/pcm;rate=24000'});
- assert.equal(sources.length,before,'Late interrupted audio must not restart playback.');
  for(let i=0;i<60;i++)frame(0);
- assert.equal(states[0],'thinking');assert.equal(socket.messages.filter((m:any)=>m.type==='activity_end').length,1);
+ assert.equal(states[0],'listening','A pause must not end an explicitly started turn.');
+ assert.equal(socket.messages.filter((m:any)=>m.type==='activity_end').length,0);
+ voice.finishSpeaking();
+ assert.equal(states[0],'thinking');
+ assert.equal(socket.messages.filter((m:any)=>m.type==='activity_end').length,1);
+
  socket.receive({type:'audio',data:Buffer.alloc(48000).toString('base64'),mimeType:'audio/pcm;rate=24000'});
  assert.equal(states[0],'speaking');
- for(let i=0;i<8;i++)frame(.04);for(let i=0;i<60;i++)frame(0);
+ voice.startSpeaking();
+ for(let i=0;i<8;i++)frame(.04);
+ assert.equal(socket.messages.filter((m:any)=>m.type==='activity_start').length,1,'Cannot start another turn while the NPC is replying.');
+ socket.receive({type:'turn_complete'});
+ const readyTimer=Array.from(timers.entries()).at(-1);
+ assert.ok(readyTimer);timers.delete(readyTimer![0]);readyTimer![1]();
+ assert.equal(states[0],'ready');
+
+ voice.startSpeaking();
+ for(let i=0;i<8;i++)frame(.04);
+ voice.finishSpeaking();
  assert.equal(socket.messages.filter((m:any)=>m.type==='activity_start').length,2);
  assert.equal(socket.messages.filter((m:any)=>m.type==='activity_end').length,2);
- voice.toggleMute();const sent=socket.messages.length;for(let i=0;i<20;i++)frame(.04);assert.equal(socket.messages.length,sent);
- voice.toggleMute();for(let i=0;i<8;i++)frame(.04);assert.equal(socket.messages.filter((m:any)=>m.type==='activity_start').length,3);
- voice.suspend(true);const paused=socket.messages.length;for(let i=0;i<20;i++)frame(.04);assert.equal(socket.messages.length,paused);
- voice.suspend(false);for(let i=0;i<8;i++)frame(.04);assert.equal(socket.messages.filter((m:any)=>m.type==='activity_start').length,4);
+
+ voice.suspend(true);const paused=socket.messages.length;
+ for(let i=0;i<20;i++)frame(.04);
+ assert.equal(socket.messages.length,paused,'Suspended side conversations must not send microphone audio.');
+ voice.suspend(false);
+ for(let i=0;i<8;i++)frame(.04);
+ assert.equal(socket.messages.filter((m:any)=>m.type==='activity_start').length,2,'The learner must press Speak again after resuming.');
+
  // Opposite startup ordering on retry: microphone ready before Gemini setup.
  await voice.connect();assert.equal(contexts.length,1);assert.equal(contexts[0].state,'running');
  const retry=sockets[1];retry.onopen();assert.equal(states[0],'connecting');
  retry.receive({type:'ready'});await new Promise(resolve=>setImmediate(resolve));
  assert.equal(states[0],'ready');assert.equal(commands.filter(c=>c.type==='start').length,2);
  for(let i=0;i<8;i++)worklets[1].port.onmessage({data:{type:'audio',samples:new Float32Array(960).fill(.04)}});
+ assert.equal(retry.messages.filter((m:any)=>m.type==='activity_start').length,0);
+ voice.startSpeaking();
+ for(let i=0;i<8;i++)worklets[1].port.onmessage({data:{type:'audio',samples:new Float32Array(960).fill(.04)}});
  assert.equal(retry.messages.filter((m:any)=>m.type==='activity_start').length,1);
-
 });
