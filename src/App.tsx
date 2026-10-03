@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
+import { ScenarioPicker } from './components/ScenarioPicker';
 import { Header } from './components/Header';
 import { IntroScene } from './components/IntroScene';
 import { CompletionScene } from './components/CompletionScene';
@@ -20,6 +21,7 @@ import { taskIds, type TaskId } from './types/game';
 function newRunSeed(){const fixed=new URLSearchParams(location.search).get('seed');return fixed!==null&&Number.isFinite(Number(fixed))?Number(fixed):Date.now();}
 export default function App(){
  const game=useGameState();
+ const [showScenarioPicker,setShowScenarioPicker]=useState(true);
  const [restart,setRestart]=useState(0),[seed,setSeed]=useState(newRunSeed);
  const [memories,setMemories]=useState<SideEventId[]>([]);
  const plan=useMemo(()=>planAmbientEvents(seed),[seed]);
@@ -27,9 +29,10 @@ export default function App(){
  const active=taskIds.includes(game.state.scene as TaskId);
  const scene=active?scenes[game.state.scene as TaskId]:null;
  const dev=import.meta.env.DEV&&new URLSearchParams(location.search).get('dev')==='true';
- const reset=()=>{game.reset();setMemories([]);setSeed(newRunSeed());};
+ const reset=()=>{voiceEnabled.current=false;game.reset();setMemories([]);setSeed(newRunSeed());};
  const reward=useCallback((id:SideEventId)=>setMemories(old=>old.includes(id)?old:[...old,id]),[]);
- return <div className={`app ${scene?'in-game':''}`}><Header home={!scene} onHome={reset}/>{game.state.scene==='intro'?<IntroScene onStart={game.start}/>:game.state.scene==='completed'?<CompletionScene onReset={reset} memories={memories.map(id=>ambientEvents[id].reward)}/>:scene&&<Game key={`${scene.id}-${restart}`} scene={scene} game={game} voiceEnabled={voiceEnabled} plan={plan} memories={memories.map(id=>ambientEvents[id].reward)} onReward={reward}/>}{dev&&<div className="dev-controls"><span>DEV</span>{scene?<><button onClick={()=>game.complete(scene.id,'Completed with development controls.')}>Mark complete / skip</button><button onClick={()=>{game.restartScene();setRestart(r=>r+1);}}>Restart scene</button></>:<button onClick={game.start}>Start journey</button>}<button onClick={reset}>Reset</button></div>}</div>;
+ if(showScenarioPicker)return <div className="app"><ScenarioPicker onEnter={()=>{reset();setShowScenarioPicker(false);}}/></div>;
+ return <div className={`app ${scene?'in-game':''}`}><Header home={!scene} handbookScene={scene??undefined} onHome={()=>{reset();setShowScenarioPicker(true);}}/>{game.state.scene==='intro'?<IntroScene onStart={game.start}/>:game.state.scene==='completed'?<CompletionScene onReset={reset} memories={memories.map(id=>ambientEvents[id].reward)}/>:scene&&<Game key={`${scene.id}-${restart}`} scene={scene} game={game} voiceEnabled={voiceEnabled} plan={plan} memories={memories.map(id=>ambientEvents[id].reward)} onReward={reward}/>}{dev&&<div className="dev-controls"><span>DEV</span>{scene?<><button onClick={()=>game.complete(scene.id,'Completed with development controls.')}>Mark complete / skip</button><button onClick={()=>{game.restartScene();setRestart(r=>r+1);}}>Restart scene</button></>:<button onClick={game.start}>Start journey</button>}<button onClick={reset}>Reset</button></div>}</div>;
 }
 function Game({scene,game,voiceEnabled,plan,memories,onReward}:{scene:typeof scenes[TaskId];game:ReturnType<typeof useGameState>;voiceEnabled:MutableRefObject<boolean>;plan:PlannedEvent[];memories:string[];onReward:(id:SideEventId)=>void}){
  const voice=useGeminiLive(scene.id,game.complete);
