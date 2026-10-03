@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { resolve, extname } from 'node:path';
+import { resolve, extname, sep } from 'node:path';
 import { readFileSync, existsSync, createReadStream } from 'node:fs';
 import { MODEL } from './agent';
 const contentTypes:Record<string,string>={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.jpg':'image/jpeg','.png':'image/png','.json':'application/json','.map':'application/json'};
@@ -16,7 +16,7 @@ export function createAppHandler(dev:boolean,configured:()=>boolean) {
     // Serve only dedicated public directories; secrets, server code, and dependencies are never assets.
     const root=dev?(pathname.startsWith('/assets/')?resolve('.dev'):resolve('public')):resolve('dist');
     const file=resolve(root,'.'+decoded);
-    if(file!==root&&!file.startsWith(root+'/')){res.writeHead(403);res.end('Forbidden');return;}
+    if(file!==root&&!file.startsWith(root+sep)){res.writeHead(403);res.end('Forbidden');return;}
     if(pathname==='/'){
       res.setHeader('Content-Type',contentTypes['.html']);
       try{

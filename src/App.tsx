@@ -11,14 +11,17 @@ import { useGameState } from './hooks/useGameState';
 import { useGeminiLive } from './hooks/useGeminiLive';
 import { scenes } from './data/scenes';
 import { taskIds, type TaskId } from './types/game';
+import { ScenarioPicker } from './components/ScenarioPicker';
 export default function App(){
  const game=useGameState();
  const [restart,setRestart]=useState(0);
+ const [showScenarioPicker,setShowScenarioPicker]=useState(true);
  const voiceEnabled=useRef(false);
  const active=taskIds.includes(game.state.scene as TaskId);
  const scene=active?scenes[game.state.scene as TaskId]:null;
  const dev=import.meta.env.DEV&&new URLSearchParams(location.search).get('dev')==='true';
- return <div className={`app ${scene?'in-game':''}`}><Header home={!scene} onHome={game.reset}/>{game.state.scene==='intro'?<IntroScene onStart={game.start}/>:game.state.scene==='completed'?<CompletionScene onReset={game.reset}/>:scene&&<Game key={`${scene.id}-${restart}`} scene={scene} game={game} voiceEnabled={voiceEnabled}/>}{dev&&<div className="dev-controls"><span>DEV</span>{scene?<><button onClick={()=>game.complete(scene.id,'Completed with development controls.')}>Mark complete / skip</button><button onClick={()=>{game.restartScene();setRestart(r=>r+1);}}>Restart scene</button></>:<button onClick={game.start}>Start journey</button>}<button onClick={game.reset}>Reset</button></div>}</div>
+ if(showScenarioPicker)return <div className="app"><ScenarioPicker onEnter={()=>{game.reset();voiceEnabled.current=false;setShowScenarioPicker(false);}}/></div>;
+ return <div className={`app ${scene?'in-game':''}`}><Header home={!scene} handbookScene={scene??undefined} onHome={()=>{game.reset();voiceEnabled.current=false;setShowScenarioPicker(true);}}/>{game.state.scene==='intro'?<IntroScene onStart={game.start}/>:game.state.scene==='completed'?<CompletionScene onReset={game.reset}/>:scene&&<Game key={`${scene.id}-${restart}`} scene={scene} game={game} voiceEnabled={voiceEnabled}/>}{dev&&<div className="dev-controls"><span>DEV</span>{scene?<><button onClick={()=>game.complete(scene.id,'Completed with development controls.')}>Mark complete / skip</button><button onClick={()=>{game.restartScene();setRestart(r=>r+1);}}>Restart scene</button></>:<button onClick={game.start}>Start journey</button>}<button onClick={game.reset}>Reset</button></div>}</div>
 }
 function Game({scene,game,voiceEnabled}:{scene:typeof scenes[TaskId];game:ReturnType<typeof useGameState>;voiceEnabled:MutableRefObject<boolean>}){
  const voice=useGeminiLive(scene.id,game.complete);
