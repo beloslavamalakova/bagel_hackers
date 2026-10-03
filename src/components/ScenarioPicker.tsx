@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Icon } from './Icon';
+import { Header } from './Header';
 import type { StoryId } from '../types/game';
 
 const scenarios = [
@@ -18,25 +19,17 @@ const helpLevels = [
   { id: 'challenge', title: 'Challenge me', description: 'Fewer hints, odd questions' },
 ] as const;
 
-export function ScenarioPicker({ onEnter }: { onEnter: (storyId: StoryId) => void }) {
+export function ScenarioPicker({ onEnter, onBack }: { onEnter: (storyId: StoryId) => void; onBack:()=>void }) {
   const [selectedScenario, setSelectedScenario] = useState<StoryId>('paris');
   const [selectedHelp, setSelectedHelp] = useState('intermediate');
-  const [customSituation, setCustomSituation] = useState('');
-  const [customMessage, setCustomMessage] = useState('');
 
   return (
     <main className="scenario-page">
-      <header className="scenario-header">
-        <div className="scenario-brand"><Icon name="croissant" size={24}/><strong>Le Comptoir</strong></div>
-        <div className="scenario-header-right">
-          <span className="scenario-tagline">FRENCH · EVERYDAY COUNTERS</span>
-          <span className="scenario-language">🇫🇷 French <span>A1</span></span>
-        </div>
-      </header>
+      <Header home onHome={onBack} onBack={onBack}/>
 
       <section className="scenario-content" aria-labelledby="scenario-title">
-        <h1 id="scenario-title">Rehearse the conversation you&apos;re afraid of.</h1>
-        <p className="scenario-lead">Apps teach words. Real people talk fast, laugh, and don&apos;t wait. Practice French in the moments that make a city feel real.</p>
+        <h1 id="scenario-title">Where will your Language take you?</h1>
+        <p className="scenario-lead">Choose a little adventure. Meet the characters, find your words, and let the conversation lead the way.</p>
 
         <h2 className="scenario-question">1. Where are you going?</h2>
         <p className="scenario-note">You won&apos;t know who&apos;s working until you walk in.</p>
@@ -84,20 +77,7 @@ export function ScenarioPicker({ onEnter }: { onEnter: (storyId: StoryId) => voi
           {selectedScenario === 'first_party' ? 'Go to the party' : 'Walk in'} <span aria-hidden="true">→</span>
         </button>
 
-        <form className="scenario-custom" onSubmit={event => {
-          event.preventDefault();
-          setCustomMessage(customSituation.trim() ? 'Custom scenarios are coming soon.' : 'Type a situation first.');
-        }}>
-          <strong>Dreading something else?</strong>
-          <input
-            aria-label="Describe your own situation"
-            placeholder="e.g. Call my landlord about a leak"
-            value={customSituation}
-            onChange={event => { setCustomSituation(event.target.value); setCustomMessage(''); }}
-          />
-          <button type="submit">Build it</button>
-          {customMessage && <span className="scenario-custom-message" role="status">{customMessage}</span>}
-        </form>
+
       </section>
     </main>
   );
